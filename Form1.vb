@@ -1,5 +1,5 @@
 ﻿Imports System.IO
-
+Imports WMPLib
 Public Class Form1
 
     Dim bmp As Bitmap
@@ -10,9 +10,20 @@ Public Class Form1
     Dim FS As CCharacter
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-    'open image for background, assign to bg
+        'open image for background, assign to bg
+        'My.Computer.Audio.Play("C:\Users\ASUS\Downloads\sprite animation v1\bin\Debug\Undertale - Megalovania.mp3")
 
-    Bg = New CImage
+
+        'add a media player
+        Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
+        'assign the location of the song to be played
+        Dim SongLocation = "C:\Users\ASUS\Downloads\sprite animation v1\bin\Debug\Undertale - Megalovania.mp3" 'any song you want to play
+        'play the song
+        Player.URL = SongLocation
+        Player.controls.play()
+
+
+        Bg = New CImage
         Bg.OpenImage("background_02.bmp")
         Bg.CopyImg(Img)
         Bg.CopyImg(Bg1)
@@ -46,9 +57,10 @@ Public Class Form1
         FlameStagIntro.Insert(339 * 2, 203 * 2, 306 * 2, 183 * 2, 370 * 2, 225 * 2, 1)
         FlameStagIntro.Insert(402 * 2, 203 * 2, 374 * 2, 178 * 2, 428 * 2, 225 * 2, 1)
         FlameStagIntro.Insert(461 * 2, 203 * 2, 431 * 2, 179 * 2, 484 * 2, 225 * 2, 1)
-        FlameStagIntro.Insert(516 * 2, 203 * 2, 492 * 2, 17 * 21, 541 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(516 * 2, 203 * 2, 492 * 2, 171 * 2, 541 * 2, 225 * 2, 1)
         FlameStagIntro.Insert(571 * 2, 203 * 2, 549 * 2, 167 * 2, 597 * 2, 225 * 2, 1)
         FlameStagIntro.Insert(622 * 2, 203 * 2, 606 * 2, 158 * 2, 645 * 2, 225 * 2, 1)
+
 
         FlameStagDownAttack = New CArrFrame
         FlameStagDownAttack.Insert(32 * 2, 267 * 2, 9 * 2, 238 * 2, 56 * 2, 288 * 2, 1)
@@ -108,13 +120,13 @@ Public Class Form1
         FS = New CCharacter
         ReDim FS.ArrSprites(11)
 
-        FS.ArrSprites(0) = FlameStagGetHit
+        FS.ArrSprites(0) = FlameStagIntro
         FS.ArrSprites(1) = FlameStagUppercut
         FS.ArrSprites(2) = FlameStagDeath
         FS.ArrSprites(3) = FlameStagCharge
         FS.ArrSprites(4) = FlameStagLanding
-        FS.ArrSprites(5) = FlameStagIntro
-        FS.ArrSprites(6) = FlameStagGetHit
+        FS.ArrSprites(5) = FlameStagGetHit
+        FS.ArrSprites(6) = FlameStagStand
         FS.ArrSprites(7) = FlameStagJump
         FS.ArrSprites(8) = FlameStagDownAttack
         FS.ArrSprites(9) = FlameStagUpAttack
