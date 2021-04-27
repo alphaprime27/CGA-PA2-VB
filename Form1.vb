@@ -19,88 +19,88 @@ Public Class Form1
 
 
         SpriteMap = New CImage
-        SpriteMap.OpenImage("flamestag.bmp")
+        SpriteMap.OpenImage("flamestag2.bmp")
         SpriteMap.CreateMask(SpriteMask)
 
         'initialize sprites
         FlameStagJump = New CArrFrame
 
-        FlameStagJump.Insert(37, 50, 7, 27, 69, 74, 1)
-        'FlameStagJump.Insert(95, 43, 78, 13, 116, 74, 1)
-        'FlameStagJump.Insert(149, 43, 125, 13, 176, 71, 1)
-        'FlameStagJump.Insert(210, 45, 183, 16, 236, 72, 1)
-        'FlameStagJump.Insert(284, 41, 252, 13, 304, 70, 1)
+        FlameStagJump.Insert(37 * 2, 50 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 1)
+        'FlameStagJump.Insert(95* 2, 43* 2, 78* 2, 13* 2, 116* 2, 74* 2, 1)
+        'FlameStagJump.Insert(149* 2, 43* 2, 125* 2, 13* 2, 176* 2, 71* 2, 1)
+        'FlameStagJump.Insert(210* 2, 45* 2, 183* 2, 16* 2, 236* 2, 72* 2, 1)
+        'FlameStagJump.Insert(284* 2, 41* 2, 252* 2, 13* 2, 304* 2, 70* 2, 1)
 
         FlameStagLanding = New CArrFrame
-        FlameStagLanding.Insert(64, 250, 26, 184, 51, 158, 1)
-        FlameStagLanding.Insert(73, 125, 56, 100, 93, 158, 1)
-        FlameStagLanding.Insert(124, 139, 98, 115, 147, 157, 1)
-        FlameStagLanding.Insert(178, 139, 152, 115, 199, 156, 1)
+        FlameStagLanding.Insert(64 * 2, 250 * 2, 26 * 2, 184 * 2, 51 * 2, 158 * 2, 1)
+        FlameStagLanding.Insert(73 * 2, 125 * 2, 56 * 2, 100 * 2, 93 * 2, 158 * 2, 1)
+        FlameStagLanding.Insert(124 * 2, 139 * 2, 98 * 2, 115 * 2, 147 * 2, 157 * 2, 1)
+        FlameStagLanding.Insert(178 * 2, 139 * 2, 152 * 2, 115 * 2, 199 * 2, 156 * 2, 1)
 
         FlameStagIntro = New CArrFrame
-        FlameStagIntro.Insert(34, 203, 8, 176, 58, 225, 1)
-        FlameStagIntro.Insert(95, 203, 71, 176, 120, 225, 1)
-        FlameStagIntro.Insert(157, 203, 131, 176, 187, 225, 1)
-        FlameStagIntro.Insert(215, 203, 192, 176, 239, 225, 1)
-        FlameStagIntro.Insert(273, 203, 245, 183, 300, 225, 1)
-        FlameStagIntro.Insert(339, 203, 306, 183, 370, 225, 1)
-        FlameStagIntro.Insert(402, 203, 374, 178, 428, 225, 1)
-        FlameStagIntro.Insert(461, 203, 431, 179, 484, 225, 1)
-        FlameStagIntro.Insert(516, 203, 492, 171, 541, 225, 1)
-        FlameStagIntro.Insert(571, 203, 549, 167, 597, 225, 1)
-        FlameStagIntro.Insert(622, 203, 606, 158, 645, 225, 1)
+        FlameStagIntro.Insert(34 * 2, 203 * 2, 8 * 2, 176 * 2, 58 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(95 * 2, 203 * 2, 71 * 2, 176 * 2, 120 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(157 * 2, 203 * 2, 131 * 2, 176 * 2, 187 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(215 * 2, 203 * 2, 192 * 2, 176 * 2, 239 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(273 * 2, 203 * 2, 245 * 2, 183 * 2, 300 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(339 * 2, 203 * 2, 306 * 2, 183 * 2, 370 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(402 * 2, 203 * 2, 374 * 2, 178 * 2, 428 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(461 * 2, 203 * 2, 431 * 2, 179 * 2, 484 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(516 * 2, 203 * 2, 492 * 2, 17 * 21, 541 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(571 * 2, 203 * 2, 549 * 2, 167 * 2, 597 * 2, 225 * 2, 1)
+        FlameStagIntro.Insert(622 * 2, 203 * 2, 606 * 2, 158 * 2, 645 * 2, 225 * 2, 1)
 
         FlameStagDownAttack = New CArrFrame
-        FlameStagDownAttack.Insert(32, 267, 9, 238, 56, 288, 1)
-        FlameStagDownAttack.Insert(92, 267, 69, 238, 117, 289, 1)
-        FlameStagDownAttack.Insert(151, 267, 126, 238, 180, 289, 1)
-        FlameStagDownAttack.Insert(213, 267, 188, 240, 243, 289, 1)
-        FlameStagDownAttack.Insert(277, 267, 255, 237, 302, 289, 1)
-        FlameStagDownAttack.Insert(346, 267, 316, 248, 376, 289, 1)
-        FlameStagDownAttack.Insert(415, 267, 381, 248, 446, 289, 1)
-        FlameStagDownAttack.Insert(493, 267, 455, 248, 523, 289, 1)
-        FlameStagDownAttack.Insert(577, 267, 529, 248, 607, 289, 1)
-        FlameStagDownAttack.Insert(672, 267, 616, 248, 703, 289, 1)
+        FlameStagDownAttack.Insert(32 * 2, 267 * 2, 9 * 2, 238 * 2, 56 * 2, 288 * 2, 1)
+        FlameStagDownAttack.Insert(92 * 2, 267 * 2, 69 * 2, 238 * 2, 117 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(151 * 2, 267 * 2, 126 * 2, 238 * 2, 180 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(213 * 2, 267 * 2, 188 * 2, 240 * 2, 243 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(277 * 2, 267 * 2, 255 * 2, 237 * 2, 302 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(346 * 2, 267 * 2, 316 * 2, 248 * 2, 376 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(415 * 2, 267 * 2, 381 * 2, 248 * 2, 446 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(493 * 2, 267 * 2, 455 * 2, 248 * 2, 523 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(577 * 2, 267 * 2, 529 * 2, 248 * 2, 607 * 2, 289 * 2, 1)
+        FlameStagDownAttack.Insert(672 * 2, 267 * 2, 616 * 2, 248 * 2, 703 * 2, 289 * 2, 1)
 
         FlameStagUpAttack = New CArrFrame
-        FlameStagUpAttack.Insert(41, 330, 12, 308, 66, 355, 1)
-        FlameStagUpAttack.Insert(107, 330, 77, 309, 129, 355, 1)
-        FlameStagUpAttack.Insert(174, 330, 143, 309, 196, 355, 1)
-        FlameStagUpAttack.Insert(242, 330, 211, 303, 264, 355, 1)
-        FlameStagUpAttack.Insert(315, 330, 279, 296, 341, 355, 1)
-        FlameStagUpAttack.Insert(374, 330, 350, 296, 399, 355, 1)
+        FlameStagUpAttack.Insert(41 * 2, 330 * 2, 12 * 2, 308 * 2, 66 * 2, 355 * 2, 1)
+        FlameStagUpAttack.Insert(107 * 2, 330 * 2, 77 * 2, 309 * 2, 129 * 2, 355 * 2, 1)
+        FlameStagUpAttack.Insert(174 * 2, 330 * 2, 143 * 2, 309 * 2, 196 * 2, 355 * 2, 1)
+        FlameStagUpAttack.Insert(242 * 2, 330 * 2, 211 * 2, 303 * 2, 264 * 2, 355 * 2, 1)
+        FlameStagUpAttack.Insert(315 * 2, 330 * 2, 279 * 2, 296 * 2, 341 * 2, 355 * 2, 1)
+        FlameStagUpAttack.Insert(374 * 2, 330 * 2, 350 * 2, 296 * 2, 399 * 2, 355 * 2, 1)
 
         FlameStagSmackDown = New CArrFrame
         FlameStagSmackDown.Insert(227, 505, 212, 472, 244, 545, 1)
 
         FlameStagDash = New CArrFrame
-        FlameStagDash.Insert(48, 399, 10, 362, 80, 428, 1)
-        FlameStagDash.Insert(134, 399, 96, 362, 165, 428, 1)
-        FlameStagDash.Insert(218, 399, 177, 362, 250, 428, 1)
-        FlameStagDash.Insert(307, 399, 258, 362, 341, 428, 1)
-        FlameStagDash.Insert(405, 399, 347, 362, 437, 428, 1)
-        FlameStagDash.Insert(509, 399, 443, 362, 540, 428, 1)
-        FlameStagDash.Insert(620, 399, 546, 360, 652, 428, 1)
-        FlameStagDash.Insert(739, 399, 657, 360, 770, 428, 1)
-        FlameStagDash.Insert(868, 399, 777, 360, 898, 428, 1)
-        FlameStagDash.Insert(1002, 399, 905, 360, 1034, 428, 1)
+        FlameStagDash.Insert(48 * 2, 399 * 2, 10 * 2, 362 * 2, 80 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(134 * 2, 399 * 2, 96 * 2, 362 * 2, 165 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(218 * 2, 399 * 2, 177 * 2, 362 * 2, 250 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(307 * 2, 399 * 2, 258 * 2, 362 * 2, 341 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(405 * 2, 399 * 2, 347 * 2, 362 * 2, 437 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(509 * 2, 399 * 2, 443 * 2, 362 * 2, 540 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(620 * 2, 399 * 2, 546 * 2, 360 * 2, 652 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(739 * 2, 399 * 2, 657 * 2, 360 * 2, 770 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(868 * 2, 399 * 2, 777 * 2, 360 * 2, 898 * 2, 428 * 2, 1)
+        FlameStagDash.Insert(1002 * 2, 399 * 2, 905 * 2, 360 * 2, 1034 * 2, 428 * 2, 1)
 
         FlameStagUppercut = New CArrFrame
-        FlameStagUppercut.Insert(37, 510, 15, 479, 52, 544, 1)
-        FlameStagUppercut.Insert(72, 510, 58, 474, 87, 545, 1)
-        FlameStagUppercut.Insert(109, 510, 94, 471, 123, 545, 1)
-        FlameStagUppercut.Insert(163, 492, 132, 451, 193, 546, 1)
+        FlameStagUppercut.Insert(37 * 2, 510 * 2, 15, 479, 52, 544, 1)
+        FlameStagUppercut.Insert(72 * 2, 510 * 2, 58, 474, 87, 545, 1)
+        FlameStagUppercut.Insert(109 * 2, 510 * 2, 94, 471, 123, 545, 1)
+        FlameStagUppercut.Insert(163 * 2, 492 * 2, 132, 451, 193, 546, 1)
 
         FlameStagCharge = New CArrFrame
-        FlameStagCharge.Insert(827, 44, 801, 15, 852, 67, 1)
-        FlameStagCharge.Insert(880, 44, 857, 16, 906, 67, 1)
+        FlameStagCharge.Insert(827 * 2, 44 * 2, 801 * 2, 15 * 2, 852 * 2, 67 * 2, 1)
+        FlameStagCharge.Insert(880 * 2, 44 * 2, 857 * 2, 16 * 2, 906 * 2, 67 * 2, 1)
 
         FlameStagDeath = New CArrFrame
-        FlameStagDeath.Insert(828, 125, 801, 90, 844, 150, 1)
-        FlameStagDeath.Insert(883, 125, 855, 96, 901, 148, 1)
+        FlameStagDeath.Insert(1656, 250, 1602, 180, 1688, 300, 1)
+        FlameStagDeath.Insert(1666, 250, 1710, 192, 1802, 296, 1)
 
         FlameStagGetHit = New CArrFrame
-        FlameStagGetHit.Insert(830, 201, 803, 171, 856, 224, 1)
+        FlameStagGetHit.Insert(1660, 402, 1606, 342, 1712, 448, 1)
 
         FlameStagStand = New CArrFrame
         FlameStagStand.Insert(68, 406, 16, 352, 116, 450, 1)
@@ -108,12 +108,12 @@ Public Class Form1
         FS = New CCharacter
         ReDim FS.ArrSprites(11)
 
-        FS.ArrSprites(0) = FlameStagStand
+        FS.ArrSprites(0) = FlameStagGetHit
         FS.ArrSprites(1) = FlameStagUppercut
         FS.ArrSprites(2) = FlameStagDeath
         FS.ArrSprites(3) = FlameStagCharge
         FS.ArrSprites(4) = FlameStagLanding
-        FS.ArrSprites(5) = FlameStagStand
+        FS.ArrSprites(5) = FlameStagIntro
         FS.ArrSprites(6) = FlameStagGetHit
         FS.ArrSprites(7) = FlameStagJump
         FS.ArrSprites(8) = FlameStagDownAttack
