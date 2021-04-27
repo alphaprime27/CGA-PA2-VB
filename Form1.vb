@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports WMPLib
 Public Class Form1
 
@@ -9,6 +9,7 @@ Public Class Form1
     Dim FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
     Dim FS As CCharacter
 
+
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'open image for background, assign to bg
         'My.Computer.Audio.Play("C:\Users\ASUS\Downloads\sprite animation v1\bin\Debug\Undertale - Megalovania.mp3")
@@ -16,8 +17,9 @@ Public Class Form1
 
         'add a media player
         Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
+
         'assign the location of the song to be played
-        Dim SongLocation = "C:\Users\ASUS\Downloads\sprite animation v1\bin\Debug\Undertale - Megalovania.mp3" 'any song you want to play
+        Dim SongLocation = "Undertale - Megalovania.mp3" 'any song you want to play
         'play the song
         Player.URL = SongLocation
         Player.controls.play()
@@ -246,15 +248,79 @@ Public Class Form1
 
 
 
-  Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
 
-    PictureBox1.Refresh()
+        PictureBox1.Refresh()
 
         FS.Update()
 
         DisplayImg()
 
 
-  End Sub
+    End Sub
+    Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
+        'detect up arrow key
+        If keyData = Keys.Up Then
+            If FS.FDir = FaceDir.Left Then
+                FS.Vx = -5
+                FS.Vy = -5
+                FS.State(StateSplitMushroom.Jump, 7)
+            ElseIf FS.FDir = FaceDir.Right Then
+                FS.Vx = 5
+                FS.Vy = -5
+                FS.State(StateSplitMushroom.Jump, 7)
+
+            End If
+        End If
+        'detect down arrow key
+        If keyData = Keys.Down Then
+            If FS.PosY = 280 Then
+                FS.State(StateSplitMushroom.Stand, 6)
+            End If
+        End If
+
+        'detect left arrow key
+        If keyData = Keys.Left Then 'dash left
+            If FS.PosY = 280 Then
+                FS.FDir = FaceDir.Right
+                FS.Vx = -10
+
+                FS.State(StateSplitMushroom.Dash, 10)
+
+            End If
+        End If
+
+        'detect right arrow key
+        If keyData = Keys.Right Then ' dash right
+            If FS.PosY = 280 Then
+                FS.State(StateSplitMushroom.Dash, 10)
+                FS.FDir = FaceDir.Left
+                FS.Vx = 10
+            End If
+
+
+        End If
+        Return MyBase.ProcessCmdKey(msg, keyData)
+    End Function
+
+    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        Dim input As String
+        input = e.KeyCode
+        Select Case input
+            Case 32 'spacebar
+                If FS.FDir = FaceDir.Left Then
+                    FS.Vx = -5
+                    FS.Vy = -5
+
+                    FS.State(StateSplitMushroom.Jump, 7)
+                ElseIf FS.FDir = FaceDir.Right Then
+                    FS.Vx = 5
+                    FS.Vy = -5
+
+                    FS.State(StateSplitMushroom.Jump, 7)
+                End If
+
+        End Select
+    End Sub
 
 End Class
