@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 
 Public Enum StateSplitMushroom
     Intro
@@ -13,6 +13,7 @@ Public Enum StateSplitMushroom
     UpAttack
     Dash
     SmackDown
+    Fall
 End Enum
 'FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit,
 'FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown
@@ -162,51 +163,83 @@ Public Class CCharacter
 
   Public Sub Update()
     Select Case CurrState
-      Case StateSplitMushroom.Intro
-        PosX = PosX + Vx
-        GetNextFrame()
-        If PosX <= 50 Then
-                    State(StateSplitMushroom.Dash, 1)
-                    Vx = 0
-          Vy = 0
-        End If
+
+            Case StateSplitMushroom.Intro
+                PosX = PosX + Vx
+
+                GetNextFrame()
+
+
+
             Case StateSplitMushroom.Jump
+                PosX = PosX + Vx
+                PosY = PosY + Vy
+                'Vy = Vy + 0.2
+
+
                 GetNextFrame()
-        If FrameIdx = 1 And CurrFrame = 1 Then
-          FDir = FaceDir.Right
-        ElseIf FrameIdx = 0 Then
-          State(StateSplitMushroom.Jump, 2)
-          Vx = 5
-          Vy = -5
-        End If
-      Case StateSplitMushroom.Jump
-        PosX = PosX + Vx
-        PosY = PosY + Vy
-        Vy = Vy + 0.2
-        GetNextFrame()
-        If PosY >= 200 And Vy > 0 Then
-                    State(StateSplitMushroom.Dash, 3)
-                    PosY = 200
-          Vx = 0
-          Vy = 0
+                If PosX >= 500 Then
+                    FDir = FaceDir.Left
+                    State(StateSplitMushroom.Jump, 7)
+                    Vx = -10
+                    Vy = 2
 
-        End If
 
+                End If
+                If PosX <= 100 Then
+                    State(StateSplitMushroom.Jump, 7)
+                    FDir = FaceDir.Right
+                    Vx = 10
+                    Vy = 2
+
+
+                End If
+                If PosY < 100 Then
+                    State(StateSplitMushroom.Fall, 2)
+
+                End If
+                If PosY > 280 Then
+                    State(StateSplitMushroom.Stand, 6)
+                    Vx = 0
+                    Vy = 0
+                End If
+
+
+            Case StateSplitMushroom.Fall
+                GetNextFrame()
+                PosX = PosX + Vx
+                PosY = PosY + Vy
+                Vx = 0
+                Vy = 10
+                If PosY > 280 Then
+                    State(StateSplitMushroom.Stand, 6)
+                    Vx = 0
+                    Vy = 0
+                    PosY = 280
+                End If
             Case StateSplitMushroom.Dash
+                PosX = PosX + Vx
                 GetNextFrame()
-        If FrameIdx = 2 And CurrFrame = 1 Then
-          FDir = FaceDir.Left
-        ElseIf FrameIdx = 0 Then
-                    State(StateSplitMushroom.Dash, 0)
-                    Vx = -5
-          Vy = 0
-        End If
+
+                If PosX >= 500 Then
+                    FDir = FaceDir.Left
+                    State(StateSplitMushroom.Stand, 6)
+
+
+
+                End If
+                If PosX <= 100 Then
+                    State(StateSplitMushroom.Stand, 6)
+                    FDir = FaceDir.Right
+
+                End If
 
 
 
 
 
-    End Select
+
+        End Select
 
   End Sub
 
