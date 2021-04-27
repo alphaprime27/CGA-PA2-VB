@@ -13,7 +13,7 @@ Public Class Form1
     'open image for background, assign to bg
 
     Bg = New CImage
-        Bg.OpenImage("volcano.bmp")
+        Bg.OpenImage("background_02.bmp")
         Bg.CopyImg(Img)
         Bg.CopyImg(Bg1)
 
@@ -32,7 +32,7 @@ Public Class Form1
         'FlameStagJump.Insert(284, 41, 252, 13, 304, 70, 1)
 
         FlameStagLanding = New CArrFrame
-        FlameStagLanding.Insert(32, 125, 13, 92, 51, 158, 1)
+        FlameStagLanding.Insert(64, 250, 26, 184, 51, 158, 1)
         FlameStagLanding.Insert(73, 125, 56, 100, 93, 158, 1)
         FlameStagLanding.Insert(124, 139, 98, 115, 147, 157, 1)
         FlameStagLanding.Insert(178, 139, 152, 115, 199, 156, 1)
@@ -103,29 +103,29 @@ Public Class Form1
         FlameStagGetHit.Insert(830, 201, 803, 171, 856, 224, 1)
 
         FlameStagStand = New CArrFrame
-        FlameStagStand.Insert(34, 203, 8, 176, 58, 225, 1)
+        FlameStagStand.Insert(68, 406, 16, 352, 116, 450, 1)
 
         FS = New CCharacter
         ReDim FS.ArrSprites(11)
 
-        FS.ArrSprites(0) = FlameStagJump
+        FS.ArrSprites(0) = FlameStagStand
         FS.ArrSprites(1) = FlameStagUppercut
         FS.ArrSprites(2) = FlameStagDeath
         FS.ArrSprites(3) = FlameStagCharge
         FS.ArrSprites(4) = FlameStagLanding
         FS.ArrSprites(5) = FlameStagStand
         FS.ArrSprites(6) = FlameStagGetHit
-        FS.ArrSprites(7) = FlameStagIntro
+        FS.ArrSprites(7) = FlameStagJump
         FS.ArrSprites(8) = FlameStagDownAttack
         FS.ArrSprites(9) = FlameStagUpAttack
         FS.ArrSprites(10) = FlameStagDash
         FS.ArrSprites(11) = FlameStagSmackDown
 
-        FS.PosX = 100
-        FS.PosY = 100
-        FS.Vx = -5
+        FS.PosX = 430
+        FS.PosY = 280
+        FS.Vx = 0
         FS.Vy = 0
-        FS.State(StateSplitMushroom.Walk, 0)
+        FS.State(StateSplitMushroom.Intro, 0)
         FS.FDir = FaceDir.Left
 
         bmp = New Bitmap(Img.Width, Img.Height)
