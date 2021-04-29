@@ -18,10 +18,26 @@ End Enum
 'FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit,
 'FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown
 Public Enum FaceDir
-  Left
-  Right
+    Left
+    Right
 End Enum
+Public Enum StateFireballs
+    Create
+    Go
+    ClimbUp
+    Destroy
+End Enum
+Public Class CFireProjectile
+    Inherits CCharacter
+    Public CurrState As StateFireballs
+    Public Sub State(state As StateFireballs, idxspr As Integer)
+        CurrState = state
+        IdxArrSprites = idxspr
+        CurrFrame = 0
+        FrameIdx = 0
+    End Sub
 
+End Class
 Public Class CImage
   Public Width As Integer
   Public Height As Integer
@@ -116,8 +132,8 @@ Public Class CImage
   Sub CopyImg(ByRef Img As CImage)
     'copies image to Img
     Img = New CImage
-        Img.Width = 600
-        Img.Height = 445
+        Img.Width = 597
+        Img.Height = 441
         ReDim Img.Elmt(Width - 1, Height - 1)
 
         For i = 0 To Width - 1
@@ -138,9 +154,10 @@ Public Class CCharacter
   Public CurrFrame As Integer
   Public ArrSprites() As CArrFrame
   Public IdxArrSprites As Integer
-  Public FDir As FaceDir
+    Public FDir As FaceDir
+    Public ok As Integer
 
-  Public Sub State(state As StateSplitMushroom, idxspr As Integer)
+    Public Sub State(state As StateSplitMushroom, idxspr As Integer)
     CurrState = state
     IdxArrSprites = idxspr
     CurrFrame = 0
@@ -148,20 +165,33 @@ Public Class CCharacter
 
   End Sub
 
-  Public Sub GetNextFrame()
-    CurrFrame = CurrFrame + 1
-    If CurrFrame = ArrSprites(IdxArrSprites).Elmt(FrameIdx).MaxFrameTime Then
-      FrameIdx = FrameIdx + 1
-      If FrameIdx = ArrSprites(IdxArrSprites).N Then
-        FrameIdx = 0
-      End If
-      CurrFrame = 0
+    Public Sub GetNextFrame()
+        CurrFrame = CurrFrame + 1
+        If CurrFrame = ArrSprites(IdxArrSprites).Elmt(FrameIdx).MaxFrameTime Then
+            FrameIdx = FrameIdx + 1
+            If FrameIdx = ArrSprites(IdxArrSprites).N Then
+                FrameIdx = 0
+            End If
+            CurrFrame = 0
 
-    End If
+        End If
 
-  End Sub
+    End Sub
+    Public Sub GetNextMove(a As StateSplitMushroom, idx As Integer)
+        CurrFrame = CurrFrame + 1
+        If CurrFrame = ArrSprites(IdxArrSprites).Elmt(FrameIdx).MaxFrameTime Then
+            FrameIdx = FrameIdx + 1
+            If FrameIdx = ArrSprites(IdxArrSprites).N Then
+                CurrFrame = 0
+                FrameIdx = 0
+                State(a, idx)
+            End If
+            CurrFrame = 0
 
-  Public Sub Update()
+        End If
+    End Sub
+
+    Public Sub Update()
     Select Case CurrState
 
             Case StateSplitMushroom.Intro
@@ -179,6 +209,7 @@ Public Class CCharacter
 
                 GetNextFrame()
                 If PosX >= 500 Then
+
                     FDir = FaceDir.Left
                     State(StateSplitMushroom.Jump, 7)
                     Vx = -10
@@ -198,10 +229,11 @@ Public Class CCharacter
                     State(StateSplitMushroom.Fall, 2)
 
                 End If
-                If PosY > 280 Then
-                    State(StateSplitMushroom.Stand, 6)
+                If PosY > 290 Then
+                    State(StateSplitMushroom.Landing, 4)
                     Vx = 0
                     Vy = 0
+                    PosY = 290
                 End If
 
 
@@ -215,7 +247,7 @@ Public Class CCharacter
                     State(StateSplitMushroom.Stand, 6)
                     Vx = 0
                     Vy = 0
-                    PosY = 280
+                    PosY = 290
                 End If
             Case StateSplitMushroom.Dash
                 PosX = PosX + Vx
@@ -223,19 +255,30 @@ Public Class CCharacter
 
                 If PosX >= 500 Then
                     FDir = FaceDir.Left
+                    PosX = 490
                     State(StateSplitMushroom.Stand, 6)
 
 
 
                 End If
                 If PosX <= 100 Then
+                    PosX = 110
                     State(StateSplitMushroom.Stand, 6)
                     FDir = FaceDir.Right
 
                 End If
+            Case StateSplitMushroom.DownAttack
+
+                GetNextMove(StateSplitMushroom.UpAttack, 9)
 
 
-
+            Case StateSplitMushroom.UpAttack
+                GetNextMove(StateSplitMushroom.Stand, 6)
+            Case StateSplitMushroom.Landing
+                GetNextMove(StateSplitMushroom.Stand, 6)
+            Case StateSplitMushroom.Charge
+                GetNextFrame()
+                State(StateSplitMushroom.Dash, 10)
 
 
 
