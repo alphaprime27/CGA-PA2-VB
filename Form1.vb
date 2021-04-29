@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports WMPLib
 Public Class Form1
 
@@ -8,6 +8,7 @@ Public Class Form1
     Dim SpriteMask, SpriteMaskMegaMan As CImage
     Dim DownFireBall, MegamanAttack, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
     Dim FS, MM, MMF, FSF As CCharacter
+    Dim ListChar As New List(Of CCharacter)
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'open image for background, assign to bg
@@ -15,26 +16,24 @@ Public Class Form1
 
 
         'add a media player
-        Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
+        'Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
+
         'assign the location of the song to be played
-        Dim SongLocation = Path.Combine(Application.StartupPath, "Undertale - Megalovania.mp3")
-        'Dim SongLocation = "C:\Users\ASUS\Downloads\sprite animation v1\bin\Debug\Undertale - Megalovania.mp3" 'any song you want to play
+        'Dim SongLocation = "Undertale - Megalovania.mp3" 'any song you want to play
         'play the song
-        Player.URL = SongLocation
-        Player.controls.play()
+        'Player.URL = SongLocation
+        'Player.controls.play()
+
 
         Bg = New CImage
         Bg.OpenImage("background_02.bmp")
         Bg.CopyImg(Img)
         Bg.CopyImg(Bg1)
 
+
         SpriteMap = New CImage
         SpriteMap.OpenImage("flamestag2.bmp")
         SpriteMap.CreateMask(SpriteMask)
-
-        SpriteMapMegaMan = New CImage
-        SpriteMapMegaMan.OpenImage("megamansprites.bmp")
-        SpriteMapMegaMan.CreateMask(SpriteMaskMegaMan)
 
         'initialize sprites
         FlameStagJump = New CArrFrame
@@ -162,14 +161,6 @@ Public Class Form1
         MM.ArrSprites(1) = MegamanStand
         MM.ArrSprites(2) = MegamanAttack
 
-        MMF = New CCharacter
-        ReDim MMF.ArrSprites(0)
-        MMF.ArrSprites(0) = MegaManFireBall
-
-        FSF = New CCharacter
-        ReDim FSF.ArrSprites(1)
-        MMF.ArrSprites(0) = UpFireBall
-        MM.ArrSprites(1) = DownFireBall
 
         FS = New CCharacter
         ReDim FS.ArrSprites(11)
@@ -188,84 +179,33 @@ Public Class Form1
         FS.ArrSprites(11) = FlameStagSmackDown
 
         FS.PosX = 430
-        FS.PosY = 280
+        FS.PosY = 290
         FS.Vx = 0
         FS.Vy = 0
         FS.State(StateSplitMushroom.Intro, 0)
         FS.FDir = FaceDir.Left
 
         bmp = New Bitmap(Img.Width, Img.Height)
-
+        ListChar.Add(FS)
         MM.PosX = 230
         MM.PosY = 280
         MM.Vx = 0
         MM.Vy = 0
         MM.State(StateSplitMushroom.Intro, 0)
         MM.FDir = FaceDir.Left
-
+        ListChar.Add(MM)
         'bmp2 = New Bitmap(Img.Width, Img.Height)
 
         DisplayImg()
-        DisplayImgMegaMan()
+        'DisplayImgMegaMan()
         ResizeImg()
 
         Timer1.Enabled = True
 
     End Sub
 
-  Sub PutSprite(ByVal c As CCharacter)
-
-    Dim i, j As Integer
-    'set background
-    For i = 0 To Img.Width - 1
-      For j = 0 To Img.Height - 1
-        Img.Elmt(i, j) = Bg1.Elmt(i, j)
-      Next
-    Next
-
-    Dim EF As CElmtFrame = c.ArrSprites(c.IdxArrSprites).Elmt(c.FrameIdx)
-    Dim spritewidth = EF.Right - EF.Left
-    Dim spriteheight = EF.Bottom - EF.Top
-
-
-    If c.FDir = FaceDir.Left Then
-      Dim spriteleft As Integer = c.PosX - EF.CtrPoint.x + EF.Left
-      Dim spritetop As Integer = c.PosY - EF.CtrPoint.y + EF.Top
-      'set mask
-      For i = 0 To spritewidth
-        For j = 0 To spriteheight
-          Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Left + i, EF.Top + j))
-        Next
-      Next
-
-      'set sprite
-      For i = 0 To spritewidth
-        For j = 0 To spriteheight
-          Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Left + i, EF.Top + j))
-        Next
-      Next
-    Else 'facing right
-      Dim spriteleft = c.PosX + EF.CtrPoint.x - EF.Right
-      Dim spritetop = c.PosY - EF.CtrPoint.y + EF.Top
-      'set mask
-      For i = 0 To spritewidth
-        For j = 0 To spriteheight
-          Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Right - i, EF.Top + j))
-        Next
-      Next
-
-      'set sprite
-      For i = 0 To spritewidth
-        For j = 0 To spriteheight
-          Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Right - i, EF.Top + j))
-        Next
-      Next
-
-    End If
-
-  End Sub
-
-    Sub PutSpriteMegaMan(ByVal c As CCharacter)
+    Sub PutSprite()
+        Dim cc As CCharacter
 
         Dim i, j As Integer
         'set background
@@ -274,58 +214,63 @@ Public Class Form1
                 Img.Elmt(i, j) = Bg1.Elmt(i, j)
             Next
         Next
+        For Each cc In ListChar
 
-        Dim EF As CElmtFrame = c.ArrSprites(c.IdxArrSprites).Elmt(c.FrameIdx)
-        Dim spritewidth = EF.Right - EF.Left
-        Dim spriteheight = EF.Bottom - EF.Top
+            Dim EF As CElmtFrame = cc.ArrSprites(cc.IdxArrSprites).Elmt(cc.FrameIdx)
 
+            Dim spritewidth = EF.Right - EF.Left
+            Dim spriteheight = EF.Bottom - EF.Top
 
-        If c.FDir = FaceDir.Left Then
-            Dim spriteleft As Integer = c.PosX - EF.CtrPoint.x + EF.Left
-            Dim spritetop As Integer = c.PosY - EF.CtrPoint.y + EF.Top
-            'set mask
-            For i = 0 To spritewidth
-                For j = 0 To spriteheight
-                    Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMaskMegaMan.Elmt(EF.Left + i, EF.Top + j))
+            If cc.FDir = FaceDir.Left Then
+                Dim spriteleft As Integer = cc.PosX - EF.CtrPoint.x + EF.Left
+                Dim spritetop As Integer = cc.PosY - EF.CtrPoint.y + EF.Top
+                'set mask
+                For i = 0 To spritewidth
+                    For j = 0 To spriteheight
+                        Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Left + i, EF.Top + j))
+                    Next
                 Next
-            Next
 
-            'set sprite
-            For i = 0 To spritewidth
-                For j = 0 To spriteheight
-                    Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMapMegaMan.Elmt(EF.Left + i, EF.Top + j))
+                'set sprite
+                For i = 0 To spritewidth
+                    For j = 0 To spriteheight
+                        Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Left + i, EF.Top + j))
+                    Next
                 Next
-            Next
-        Else 'facing right
-            Dim spriteleft = c.PosX + EF.CtrPoint.x - EF.Right
-            Dim spritetop = c.PosY - EF.CtrPoint.y + EF.Top
-            'set mask
-            For i = 0 To spritewidth
-                For j = 0 To spriteheight
-                    Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMaskMegaMan.Elmt(EF.Right - i, EF.Top + j))
+            Else 'facing right
+                Dim spriteleft = cc.PosX + EF.CtrPoint.x - EF.Right
+                Dim spritetop = cc.PosY - EF.CtrPoint.y + EF.Top
+                'set mask
+                For i = 0 To spritewidth
+                    For j = 0 To spriteheight
+                        Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Right - i, EF.Top + j))
+                    Next
                 Next
-            Next
 
-            'set sprite
-            For i = 0 To spritewidth
-                For j = 0 To spriteheight
-                    Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMapMegaMan.Elmt(EF.Right - i, EF.Top + j))
+                'set sprite
+                For i = 0 To spritewidth
+                    For j = 0 To spriteheight
+                        Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Right - i, EF.Top + j))
+                    Next
                 Next
-            Next
 
-        End If
+            End If
+        Next
+
 
     End Sub
+
+
     Sub DisplayImg()
-    'display bg and sprite on picturebox
-    Dim i, j As Integer
-        PutSprite(FS)
+        'display bg and sprite on picturebox
+        Dim i, j As Integer
+        PutSprite()
 
         For i = 0 To Img.Width - 1
-      For j = 0 To Img.Height - 1
-        bmp.SetPixel(i, j, Img.Elmt(i, j))
-      Next
-    Next
+            For j = 0 To Img.Height - 1
+                bmp.SetPixel(i, j, Img.Elmt(i, j))
+            Next
+        Next
         PictureBox1.Refresh()
         'PictureBox1.Refresh()
 
@@ -338,27 +283,27 @@ Public Class Form1
         'Me.Height = PictureBox1.Height + 100
     End Sub
 
-    Sub DisplayImgMegaMan()
-        'display bg and sprite on picturebox
-        Dim i, j As Integer
-        PutSpriteMegaMan(MM)
+    'Sub DisplayImgMegaMan()
+    '    'display bg and sprite on picturebox
+    '    Dim i, j As Integer
+    '    PutSpriteMegaMan(MM)
 
-        For i = 0 To Img.Width - 1
-            For j = 0 To Img.Height - 1
-                bmp.SetPixel(i, j, Img.Elmt(i, j))
-            Next
-        Next
+    '    For i = 0 To Img.Width - 1
+    '        For j = 0 To Img.Height - 1
+    '            bmp.SetPixel(i, j, Img.Elmt(i, j))
+    '        Next
+    '    Next
 
 
-        PictureBox1.Image = bmp
-        PictureBox1.Width = bmp.Width
-        PictureBox1.Height = bmp.Height
-        PictureBox1.Top = 0
-        PictureBox1.Left = 0
-        'Me.Width = PictureBox1.Width + 30
-        'Me.Height = PictureBox1.Height + 100
+    '    PictureBox1.Image = bmp
+    '    PictureBox1.Width = bmp.Width
+    '    PictureBox1.Height = bmp.Height
+    '    PictureBox1.Top = 0
+    '    PictureBox1.Left = 0
+    '    'Me.Width = PictureBox1.Width + 30
+    '    'Me.Height = PictureBox1.Height + 100
 
-    End Sub
+    'End Sub
 
     Sub ResizeImg()
         Dim w, h As Integer
@@ -368,18 +313,20 @@ Public Class Form1
 
     End Sub
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        PictureBox1.Refresh()
 
+        For Each CC In ListChar
+            CC.Update()
 
-        FS.Update()
+        Next
 
-        MM.Update()
         DisplayImg()
 
-        DisplayImgMegaMan()
-
-
+        FS.Update()
+        MM.Update()
+        DisplayImg()
+        'DisplayImgMegaMan()
     End Sub
-
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
         'detect up arrow key
         If keyData = Keys.Up Then
@@ -396,14 +343,14 @@ Public Class Form1
         End If
         'detect down arrow key
         If keyData = Keys.Down Then
-            If FS.PosY = 280 Then
+            If FS.PosY = 290 Then
                 FS.State(StateSplitMushroom.Stand, 6)
             End If
         End If
 
         'detect left arrow key
         If keyData = Keys.Left Then 'dash left
-            If FS.PosY = 280 Then
+            If FS.PosY = 290 Then
                 FS.FDir = FaceDir.Right
                 FS.Vx = -10
 
@@ -414,13 +361,11 @@ Public Class Form1
 
         'detect right arrow key
         If keyData = Keys.Right Then ' dash right
-            If FS.PosY = 280 Then
+            If FS.PosY = 290 Then
                 FS.State(StateSplitMushroom.Dash, 10)
                 FS.FDir = FaceDir.Left
                 FS.Vx = 10
             End If
-
-
         End If
         Return MyBase.ProcessCmdKey(msg, keyData)
     End Function
