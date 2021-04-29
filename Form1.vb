@@ -331,12 +331,12 @@ Public Class Form1
         'detect up arrow key
         If keyData = Keys.Up Then
             If FS.FDir = FaceDir.Left Then
-                FS.Vx = -5
-                FS.Vy = -5
+                FS.Vx = -10
+                FS.Vy = -2
                 FS.State(StateSplitMushroom.Jump, 7)
             ElseIf FS.FDir = FaceDir.Right Then
-                FS.Vx = 5
-                FS.Vy = -5
+                FS.Vx = 10
+                FS.Vy = -2
                 FS.State(StateSplitMushroom.Jump, 7)
 
             End If
@@ -350,19 +350,21 @@ Public Class Form1
 
         'detect left arrow key
         If keyData = Keys.Left Then 'dash left
-            If FS.PosY = 290 Then
+            If FS.PosY >= 290 Then
+                FS.PosY = 290
                 FS.FDir = FaceDir.Right
                 FS.Vx = -10
 
-                FS.State(StateSplitMushroom.Dash, 10)
+                FS.State(StateSplitMushroom.Charge, 3)
 
             End If
         End If
 
         'detect right arrow key
         If keyData = Keys.Right Then ' dash right
-            If FS.PosY = 290 Then
-                FS.State(StateSplitMushroom.Dash, 10)
+            If FS.PosY >= 290 Then
+                FS.PosY = 290
+                FS.State(StateSplitMushroom.Charge, 3)
                 FS.FDir = FaceDir.Left
                 FS.Vx = 10
             End If
@@ -375,19 +377,27 @@ Public Class Form1
         input = e.KeyCode
         Select Case input
             Case 32 'spacebar
-                If FS.FDir = FaceDir.Left Then
-                    FS.Vx = -5
-                    FS.Vy = -5
+                If FS.PosY >= 290 Then
+                    FS.PosY = 290
+                    FS.State(StateSplitMushroom.DownAttack, 8)
+                    If FS.CurrState = StateSplitMushroom.DownAttack And FS.CurrFrame = 10 Then
+                        'CreateFireBall(1)
+                    End If
 
-                    FS.State(StateSplitMushroom.Jump, 7)
-                ElseIf FS.FDir = FaceDir.Right Then
-                    FS.Vx = 5
-                    FS.Vy = -5
-
-                    FS.State(StateSplitMushroom.Jump, 7)
                 End If
 
         End Select
     End Sub
+    ' Sub CreateFireball(i As Integer)
+    'Dim Fire As StateFireballs
+    '    Fire = New StateFireballs
+    'If FS.FDir = FaceDir.Left Then
+    '        Fire.PosX = FS.PosX - 20
+    '       Fire.FDir = FaceDir.Left
+    'Else
+    '       SP.PosX = SM.PosX + 20
+    '       SP.FDir = FaceDir.Right
+    'End If
+    ' End Sub
 
 End Class
