@@ -213,8 +213,6 @@ Public Class Form1
         Timer1.Enabled = True
 
     End Sub
-
-
     Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
 
@@ -235,6 +233,7 @@ Public Class Form1
         End If
 
     End Function
+
     Sub PutSprite()
         Dim cc As CCharacter
 
@@ -251,6 +250,7 @@ Public Class Form1
 
             Dim spritewidth = EF.Right - EF.Left
             Dim spriteheight = EF.Bottom - EF.Top
+            Dim imgx, imgy As Integer
 
             If cc.FDir = FaceDir.Left Then
                 Dim spriteleft As Integer = cc.PosX - EF.CtrPoint.x + EF.Left
@@ -258,14 +258,22 @@ Public Class Form1
                 'set mask
                 For i = 0 To spritewidth
                     For j = 0 To spriteheight
-                        Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Left + i, EF.Top + j))
+                        imgx = spriteleft + i
+                        imgy = spritetop + j
+                        If spriteleft + i >= 0 And spriteleft + i <= Img.Width - 1 And spritetop + j >= 0 And spritetop + j <= Img.Height - 1 Then
+                            Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Left + i, EF.Top + j))
+                        End If
+
                     Next
                 Next
 
                 'set sprite
                 For i = 0 To spritewidth
                     For j = 0 To spriteheight
-                        Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Left + i, EF.Top + j))
+                        If spriteleft + i >= 0 And spriteleft + i <= Img.Width - 1 And spritetop + j >= 0 And spritetop + j <= Img.Height - 1 Then
+                            Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Left + i, EF.Top + j))
+                        End If
+
                     Next
                 Next
             Else 'facing right
@@ -274,14 +282,20 @@ Public Class Form1
                 'set mask
                 For i = 0 To spritewidth
                     For j = 0 To spriteheight
-                        Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Right - i, EF.Top + j))
+                        If spriteleft + i >= 0 And spriteleft + i <= Img.Width - 1 And spritetop + j >= 0 And spritetop + j <= Img.Height - 1 Then
+                            Img.Elmt(spriteleft + i, spritetop + j) = OpAnd(Img.Elmt(spriteleft + i, spritetop + j), SpriteMask.Elmt(EF.Right - i, EF.Top + j))
+                        End If
+
                     Next
                 Next
 
                 'set sprite
                 For i = 0 To spritewidth
                     For j = 0 To spriteheight
-                        Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Right - i, EF.Top + j))
+                        If spriteleft + i >= 0 And spriteleft + i < Img.Width - 1 And spritetop + j >= 0 And spritetop + j <= Img.Height - 1 Then
+                            Img.Elmt(spriteleft + i, spritetop + j) = OpOr(Img.Elmt(spriteleft + i, spritetop + j), SpriteMap.Elmt(EF.Right - i, EF.Top + j))
+                        End If
+
                     Next
                 Next
 
@@ -310,36 +324,58 @@ Public Class Form1
         PictureBox1.Height = bmp.Height
         PictureBox1.Top = 0
         PictureBox1.Left = 0
-        'PictureBox1.Image.Location.Y = 500
         'Me.Width = PictureBox1.Width + 30
         'Me.Height = PictureBox1.Height + 100
     End Sub
 
+    'Sub DisplayImgMegaMan()
+    '    'display bg and sprite on picturebox
+    '    Dim i, j As Integer
+    '    PutSpriteMegaMan(MM)
+
+    '    For i = 0 To Img.Width - 1
+    '        For j = 0 To Img.Height - 1
+    '            bmp.SetPixel(i, j, Img.Elmt(i, j))
+    '        Next
+    '    Next
+
+
+    '    PictureBox1.Image = bmp
+    '    PictureBox1.Width = bmp.Width
+    '    PictureBox1.Height = bmp.Height
+    '    PictureBox1.Top = 0
+    '    PictureBox1.Left = 0
+    '    'Me.Width = PictureBox1.Width + 30
+    '    'Me.Height = PictureBox1.Height + 100
+
+    'End Sub
+
     Sub ResizeImg()
         Dim w, h As Integer
         w = PictureBox1.Width
-        h = PictureBox1.Height / 2
+        h = PictureBox1.Height
         Me.ClientSize = New Size(w, h)
 
     End Sub
-
-
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
         PictureBox1.Refresh()
 
         For Each CC In ListChar
             CC.Update()
+
+
         Next
-
-        DisplayImg()
-
-        FS.Update()
-        MM.Update()
         x = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
         If x Then
             ' MM.State(StateSplitMushroom.MMAttacked, 3)
             MM.PosX = 400
         End If
+        If FS.CurrState = StateSplitMushroom.DownAttack And FS.CurrFrame = 0 Then
+            CreateFireball(1)
+        ElseIf FS.CurrState = StateSplitMushroom.UpAttack And FS.CurrFrame = 0 Then
+            CreateFireball(2)
+        End If
+
         Dim Listchar1 As New List(Of CCharacter)
 
         For Each CC In ListChar
@@ -349,6 +385,14 @@ Public Class Form1
         Next
 
         ListChar = Listchar1
+
+
+
+        DisplayImg()
+
+        FS.Update()
+        MM.Update()
+
         DisplayImg()
         'DisplayImgMegaMan()
     End Sub
@@ -357,13 +401,11 @@ Public Class Form1
         If keyData = Keys.Up Then
             If FS.FDir = FaceDir.Left Then
                 FS.Vx = -40
-                FS.Vy = -15
+                FS.Vy = -8
                 FS.State(StateSplitMushroom.Jump, 7)
-
-
             ElseIf FS.FDir = FaceDir.Right Then
                 FS.Vx = 40
-                FS.Vy = -15
+                FS.Vy = -8
                 FS.State(StateSplitMushroom.Jump, 7)
 
             End If
@@ -372,6 +414,9 @@ Public Class Form1
         If keyData = Keys.Down Then
             If FS.PosY = 290 Then
                 FS.State(StateSplitMushroom.Stand, 6)
+            End If
+            If FS.CurrState = StateSplitMushroom.Jump Then
+                FS.State(StateSplitMushroom.JumpDown, 7)
             End If
         End If
 
@@ -391,10 +436,10 @@ Public Class Form1
         If keyData = Keys.Right Then ' dash right
             If FS.PosY >= 290 Then
                 FS.PosY = 290
-                FS.State(StateSplitMushroom.Charge, 3)
                 FS.FDir = FaceDir.Left
-                FS.Vx = 50
+                FS.State(StateSplitMushroom.Charge, 3)
 
+                FS.Vx = 50
             End If
         End If
         Return MyBase.ProcessCmdKey(msg, keyData)
@@ -408,24 +453,42 @@ Public Class Form1
                 If FS.PosY >= 290 Then
                     FS.PosY = 290
                     FS.State(StateSplitMushroom.DownAttack, 8)
-                    If FS.CurrState = StateSplitMushroom.DownAttack And FS.CurrFrame = 10 Then
-                        'CreateFireBall(1)
-                    End If
 
                 End If
 
         End Select
     End Sub
-    ' Sub CreateFireball(i As Integer)
-    'Dim Fire As StateFireballs
-    '    Fire = New StateFireballs
-    'If FS.FDir = FaceDir.Left Then
-    '        Fire.PosX = FS.PosX - 20
-    '       Fire.FDir = FaceDir.Left
-    'Else
-    '       SP.PosX = SM.PosX + 20
-    '       SP.FDir = FaceDir.Right
-    'End If
-    ' End Sub
+    Sub CreateFireball(i As Integer)
+
+        Dim Fire As CFireProjectile
+        Fire = New CFireProjectile
+        If FS.FDir = FaceDir.Left Then
+            Fire.PosX = FS.PosX - 20
+            Fire.FDir = FaceDir.Left
+        Else
+            Fire.PosX = FS.PosX + 20
+            Fire.FDir = FaceDir.Right
+        End If
+        Fire.PosY = FS.PosY - 3
+        Fire.Vx = 0
+        Fire.Vy = 0
+
+        ReDim Fire.ArrSprites(2)
+        If i = 1 Then
+            Fire.CurrState = StateFireballs.Create
+        Else
+            Fire.CurrState = StateFireballs.Create2
+        End If
+        Fire.ArrSprites(0) = FlameStagJump
+        Fire.ArrSprites(1) = FlameStagJump
+        Fire.ArrSprites(2) = FlameStagDash
+
+        ListChar.Add(Fire)
+
+    End Sub
+
+
+
+
 
 End Class
