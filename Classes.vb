@@ -23,115 +23,107 @@ Public Enum FaceDir
 End Enum
 Public Enum StateFireballs
     Create
+    Create2
     Go
+    Go2
     ClimbUp
     Destroy
 End Enum
-Public Class CFireProjectile
-    Inherits CCharacter
-    Public CurrState As StateFireballs
-    Public Sub State(state As StateFireballs, idxspr As Integer)
-        CurrState = state
-        IdxArrSprites = idxspr
-        CurrFrame = 0
-        FrameIdx = 0
+
+Public Class CImage
+    Public Width As Integer
+    Public Height As Integer
+    Public Elmt(,) As System.Drawing.Color
+    Public ColorMode As Integer 'not used
+
+    Sub OpenImage(ByVal FName As String)
+        Dim s As String
+        Dim L As Long
+        Dim BR As BinaryReader
+        Dim h, w, pos As Integer
+        Dim r, g, b As Integer
+        Dim pad As Integer
+
+        BR = New BinaryReader(File.Open(FName, FileMode.Open))
+
+        Try
+            BlockRead(BR, 2, s)
+
+            If s <> "BM" Then
+                MsgBox("Not a BMP file")
+            Else 'BMP file
+                BlockReadInt(BR, 4, L) 'size
+                'MsgBox("Size = " + CStr(L))
+                BlankRead(BR, 4) 'reserved
+                BlockReadInt(BR, 4, pos) 'start of data
+                BlankRead(BR, 4) 'size of header
+                BlockReadInt(BR, 4, Width) 'width
+                'MsgBox("Width = " + CStr(I.Width))
+                BlockReadInt(BR, 4, Height) 'height
+                'MsgBox("Height = " + CStr(I.Height))
+                BlankRead(BR, 2) 'color panels
+                BlockReadInt(BR, 2, ColorMode) 'colormode
+                If ColorMode <> 24 Then
+                    MsgBox("Not a 24-bit color BMP")
+                Else
+
+                    BlankRead(BR, pos - 30)
+
+                    ReDim Elmt(Width - 1, Height - 1)
+                    pad = (4 - (Width * 3 Mod 4)) Mod 4
+
+                    For h = Height - 1 To 0 Step -1
+                        For w = 0 To Width - 1
+                            BlockReadInt(BR, 1, b)
+                            BlockReadInt(BR, 1, g)
+                            BlockReadInt(BR, 1, r)
+                            Elmt(w, h) = Color.FromArgb(r, g, b)
+
+                        Next
+                        BlankRead(BR, pad)
+
+                    Next
+
+                End If
+
+            End If
+
+        Catch ex As Exception
+            MsgBox("Error")
+
+        End Try
+
+        BR.Close()
+
+
     End Sub
 
-End Class
-Public Class CImage
-  Public Width As Integer
-  Public Height As Integer
-  Public Elmt(,) As System.Drawing.Color
-  Public ColorMode As Integer 'not used
 
-  Sub OpenImage(ByVal FName As String)
-    Dim s As String
-    Dim L As Long
-    Dim BR As BinaryReader
-    Dim h, w, pos As Integer
-    Dim r, g, b As Integer
-    Dim pad As Integer
+    Sub CreateMask(ByRef Mask As CImage)
+        Dim i, j As Integer
 
-    BR = New BinaryReader(File.Open(FName, FileMode.Open))
+        Mask = New CImage
+        Mask.Width = Width
+        Mask.Height = Height
 
-    Try
-      BlockRead(BR, 2, s)
+        ReDim Mask.Elmt(Mask.Width - 1, Mask.Height - 1)
 
-      If s <> "BM" Then
-        MsgBox("Not a BMP file")
-      Else 'BMP file
-        BlockReadInt(BR, 4, L) 'size
-        'MsgBox("Size = " + CStr(L))
-        BlankRead(BR, 4) 'reserved
-        BlockReadInt(BR, 4, pos) 'start of data
-        BlankRead(BR, 4) 'size of header
-        BlockReadInt(BR, 4, Width) 'width
-        'MsgBox("Width = " + CStr(I.Width))
-        BlockReadInt(BR, 4, Height) 'height
-        'MsgBox("Height = " + CStr(I.Height))
-        BlankRead(BR, 2) 'color panels
-        BlockReadInt(BR, 2, ColorMode) 'colormode
-        If ColorMode <> 24 Then
-          MsgBox("Not a 24-bit color BMP")
-        Else
-
-          BlankRead(BR, pos - 30)
-
-          ReDim Elmt(Width - 1, Height - 1)
-          pad = (4 - (Width * 3 Mod 4)) Mod 4
-
-          For h = Height - 1 To 0 Step -1
-            For w = 0 To Width - 1
-              BlockReadInt(BR, 1, b)
-              BlockReadInt(BR, 1, g)
-              BlockReadInt(BR, 1, r)
-              Elmt(w, h) = Color.FromArgb(r, g, b)
-
+        For i = 0 To Width - 1
+            For j = 0 To Height - 1
+                If Elmt(i, j).R = 0 And Elmt(i, j).G = 0 And Elmt(i, j).B = 0 Then
+                    Mask.Elmt(i, j) = Color.FromArgb(255, 255, 255)
+                Else
+                    Mask.Elmt(i, j) = Color.FromArgb(0, 0, 0)
+                End If
             Next
-            BlankRead(BR, pad)
+        Next
 
-          Next
-
-        End If
-
-      End If
-
-    Catch ex As Exception
-      MsgBox("Error")
-
-    End Try
-
-    BR.Close()
+    End Sub
 
 
-  End Sub
-
-
-  Sub CreateMask(ByRef Mask As CImage)
-    Dim i, j As Integer
-
-    Mask = New CImage
-    Mask.Width = Width
-    Mask.Height = Height
-
-    ReDim Mask.Elmt(Mask.Width - 1, Mask.Height - 1)
-
-    For i = 0 To Width - 1
-      For j = 0 To Height - 1
-        If Elmt(i, j).R = 0 And Elmt(i, j).G = 0 And Elmt(i, j).B = 0 Then
-          Mask.Elmt(i, j) = Color.FromArgb(255, 255, 255)
-        Else
-          Mask.Elmt(i, j) = Color.FromArgb(0, 0, 0)
-        End If
-      Next
-    Next
-
-  End Sub
-
-
-  Sub CopyImg(ByRef Img As CImage)
-    'copies image to Img
-    Img = New CImage
+    Sub CopyImg(ByRef Img As CImage)
+        'copies image to Img
+        Img = New CImage
         Img.Width = 597
         Img.Height = 441
         ReDim Img.Elmt(Width - 1, Height - 1)
@@ -142,28 +134,35 @@ Public Class CImage
             Next
         Next
 
-  End Sub
+    End Sub
 
+End Class
+Public Class character
+    Public Overridable Sub Update()
+
+    End Sub
 End Class
 
 Public Class CCharacter
-  Public PosX, PosY As Double
-  Public Vx, Vy As Double
-  Public CurrState As StateSplitMushroom
-  Public FrameIdx As Integer
-  Public CurrFrame As Integer
-  Public ArrSprites() As CArrFrame
-  Public IdxArrSprites As Integer
+    Inherits character
+    Public PosX, PosY As Double
+    Public Vx, Vy As Double
+    Public CurrState As StateSplitMushroom
+    Public FrameIdx As Integer
+    Public CurrFrame As Integer
+    Public ArrSprites() As CArrFrame
+    Public IdxArrSprites As Integer
     Public FDir As FaceDir
     Public ok As Integer
+    Public Destroy As Boolean = False
 
     Public Sub State(state As StateSplitMushroom, idxspr As Integer)
-    CurrState = state
-    IdxArrSprites = idxspr
-    CurrFrame = 0
-    FrameIdx = 0
+        CurrState = state
+        IdxArrSprites = idxspr
+        CurrFrame = 0
+        FrameIdx = 0
 
-  End Sub
+    End Sub
 
     Public Sub GetNextFrame()
         CurrFrame = CurrFrame + 1
@@ -177,6 +176,7 @@ Public Class CCharacter
         End If
 
     End Sub
+
     Public Sub GetNextMove(a As StateSplitMushroom, idx As Integer)
         CurrFrame = CurrFrame + 1
         If CurrFrame = ArrSprites(IdxArrSprites).Elmt(FrameIdx).MaxFrameTime Then
@@ -191,15 +191,14 @@ Public Class CCharacter
         End If
     End Sub
 
-    Public Sub Update()
-    Select Case CurrState
+    Public Overrides Sub Update()
+        Select Case CurrState
 
             Case StateSplitMushroom.Intro
-                PosX = PosX + Vx
-
                 GetNextFrame()
-
-
+                If FrameIdx = 4 And CurrFrame = 1 Then
+                    State(StateSplitMushroom.Stand, 6)
+                End If
 
             Case StateSplitMushroom.Jump
                 PosX = PosX + Vx
@@ -213,7 +212,7 @@ Public Class CCharacter
                     FDir = FaceDir.Left
                     State(StateSplitMushroom.Jump, 7)
                     Vx = -10
-                    Vy = 2
+                    Vy = -2
 
 
                 End If
@@ -221,7 +220,7 @@ Public Class CCharacter
                     State(StateSplitMushroom.Jump, 7)
                     FDir = FaceDir.Right
                     Vx = 10
-                    Vy = 2
+                    Vy = -2
 
 
                 End If
@@ -252,6 +251,7 @@ Public Class CCharacter
             Case StateSplitMushroom.Dash
                 PosX = PosX + Vx
                 GetNextFrame()
+
 
                 If PosX >= 500 Then
                     FDir = FaceDir.Left
@@ -284,7 +284,66 @@ Public Class CCharacter
 
         End Select
 
-  End Sub
+    End Sub
+
+End Class
+Public Class CFireProjectile
+    Inherits CCharacter
+    Public CurrState As StateFireballs
+    Public Overloads Sub State(state As StateFireballs, idxspr As Integer)
+        CurrState = state
+        IdxArrSprites = idxspr
+        CurrFrame = 0
+        FrameIdx = 0
+    End Sub
+    Public Overrides Sub Update()
+        Select Case CurrState
+            Case StateFireballs.Create
+                GetNextFrame()
+                PosX = PosX + Vx
+                State(StateFireballs.Go, 1)
+
+            Case StateFireballs.Go
+                GetNextFrame()
+                PosX = PosX + Vx
+                If FDir = FaceDir.Left And PosX <= 100 Or FDir = FaceDir.Right And PosX >= 500 Then
+                    Destroy = True
+                End If
+                If FDir = FaceDir.Left Then
+                    Vx = -6
+                Else
+                    Vx = 6
+                End If
+            Case StateFireballs.Create2
+                GetNextFrame()
+                PosX = PosX + Vx
+                State(StateFireballs.Go2, 1)
+
+            Case StateFireballs.Go2
+                GetNextFrame()
+                PosX = PosX + Vx
+                If FDir = FaceDir.Left And PosX <= 100 Or FDir = FaceDir.Right And PosX >= 500 Then
+                    State(StateFireballs.ClimbUp, 1)
+                End If
+                If FDir = FaceDir.Left Then
+                    Vx = -10
+                Else
+                    Vx = 10
+                End If
+            Case StateFireballs.ClimbUp
+                GetNextFrame()
+                PosY = PosY + Vy
+                Vy = -10
+                If PosY < 100 Then
+                    Destroy = True
+                End If
+
+
+
+
+
+        End Select
+    End Sub
 
 End Class
 
