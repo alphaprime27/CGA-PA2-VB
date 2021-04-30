@@ -6,10 +6,11 @@ Public Class Form1
     Dim Bg, Bg1, Img As CImage
     Dim SpriteMap, SpriteMapMegaMan As CImage
     Dim SpriteMask, SpriteMaskMegaMan As CImage
-    Dim DownFireBall, FlameStagStanceOnTheWall, FlameStagStanceOnTheGround, MegamanAttacked, MegamanAttack, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
+    Dim DownFireBall, MegamanAttacked, MegamanAttack, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagStanceOnTheGround, FlameStagUppercut, FlameStagStanceOnTheWall, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
     Dim FS, MM, MMF, FSF As CCharacter
     Dim ListChar As New List(Of CCharacter)
     Dim x As Boolean
+
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'open image for background, assign to bg
@@ -23,6 +24,7 @@ Public Class Form1
         'play the song
         'Player.URL = SongLocation
         'Player.controls.play()
+
 
         Bg = New CImage
         Bg.OpenImage("background.bmp")
@@ -38,7 +40,12 @@ Public Class Form1
 
         'FlameStagJump.Insert(37 * 2, 53 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 1)
         FlameStagJump.Insert(104 * 2, 53 * 2, 77 * 2, 27 * 2, 139 * 2, 74 * 2, 1)
+        'FlameStagJump.Insert(149* 2, 43* 2, 125* 2, 13* 2, 176* 2, 71* 2, 1)
+        'FlameStagJump.Insert(210* 2, 45* 2, 183* 2, 16* 2, 236* 2, 72* 2, 1)
+        'FlameStagJump.Insert(284* 2, 41* 2, 252* 2, 13* 2, 304* 2, 70* 2, 1)
+        FlameStagStanceOnTheGround = New CArrFrame
 
+        FlameStagStanceOnTheGround.Insert(37 * 2, 53 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 10)
 
         FlameStagStanceOnTheWall = New CArrFrame
         FlameStagStanceOnTheWall.Insert(168 * 2, 44 * 2, 148 * 2, 13 * 2, 186 * 2, 74 * 2, 3)
@@ -169,10 +176,6 @@ Public Class Form1
         MegamanAttacked.Insert(133 * 2, 776 * 2, 111 * 2, 748 * 2, 154 * 2, 792 * 2, 1)
         MegamanAttacked.Insert(183 * 2, 776 * 2, 162 * 2, 749 * 2, 205 * 2, 788 * 2, 1)
 
-        FlameStagStanceOnTheGround = New CArrFrame
-
-        FlameStagStanceOnTheGround.Insert(37 * 2, 53 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 10)
-
         MM = New CCharacter
         ReDim MM.ArrSprites(3)
         MM.ArrSprites(0) = MegamanStand
@@ -199,7 +202,7 @@ Public Class Form1
         FS.ArrSprites(13) = FlameStagStanceOnTheWall
 
         FS.PosX = 460
-        FS.PosY = 290
+        FS.PosY = 340
         FS.Vx = 0
         FS.Vy = 0
         FS.State(StateSplitMushroom.Intro, 0)
@@ -208,7 +211,7 @@ Public Class Form1
         bmp = New Bitmap(Img.Width, Img.Height)
         ListChar.Add(FS)
         MM.PosX = 150
-        MM.PosY = 300
+        MM.PosY = 340
         MM.Vx = 0
         MM.Vy = 0
         MM.State(StateSplitMushroom.Intro, 0)
@@ -261,11 +264,14 @@ Public Class Form1
             Dim spritewidth = EF.Right - EF.Left
             Dim spriteheight = EF.Bottom - EF.Top
             Dim imgx, imgy As Integer
+            Dim scrX, scrY As Integer
+
 
             If cc.FDir = FaceDir.Left Then
                 Dim spriteleft As Integer = cc.PosX - EF.CtrPoint.x + EF.Left
                 Dim spritetop As Integer = cc.PosY - EF.CtrPoint.y + EF.Top
                 'set mask
+
                 For i = 0 To spritewidth
                     For j = 0 To spriteheight
                         imgx = spriteleft + i
@@ -380,9 +386,9 @@ Public Class Form1
             ' MM.State(StateSplitMushroom.MMAttacked, 3)
             MM.PosX = 400
         End If
-        If FS.CurrState = StateSplitMushroom.DownAttack And FS.CurrFrame = 0 Then
+        If FS.CurrState = StateSplitMushroom.DownAttack And FS.FrameIdx = 5 Then
             CreateFireball(1)
-        ElseIf FS.CurrState = StateSplitMushroom.UpAttack And FS.CurrFrame = 0 Then
+        ElseIf FS.CurrState = StateSplitMushroom.UpAttack And FS.FrameIdx = 3 Then
             CreateFireball(2)
         End If
 
@@ -412,28 +418,38 @@ Public Class Form1
             If FS.FDir = FaceDir.Left Then
                 FS.Vx = -40
                 FS.Vy = -8
-                FS.State(StateSplitMushroom.StanceOnTheGround, 12)
+                FS.State(StateSplitMushroom.JumpStance, 12)
             ElseIf FS.FDir = FaceDir.Right Then
                 FS.Vx = 40
                 FS.Vy = -8
-                FS.State(StateSplitMushroom.StanceOnTheGround, 12)
+                FS.State(StateSplitMushroom.JumpStance, 12)
 
             End If
         End If
         'detect down arrow key
         If keyData = Keys.Down Then
-            If FS.PosY = 290 Then
+            If FS.PosY = 340 Then
                 FS.State(StateSplitMushroom.Stand, 6)
             End If
-            If FS.CurrState = StateSplitMushroom.Jump Then
-                FS.State(StateSplitMushroom.JumpDown, 7)
+            If FS.CurrState = StateSplitMushroom.ChangeStance Then
+                FS.godown = True
+                If FS.FDir = FaceDir.Left Then
+                    FS.Vx = -40
+                    FS.Vy = 8
+                    '  FS.State(StateSplitMushroom.JumpDown, 7)
+                ElseIf FS.FDir = FaceDir.Right Then
+                    FS.Vx = 40
+                    FS.Vy = 8
+                    '  FS.State(StateSplitMushroom.JumpDown, 7)
+
+                End If
             End If
         End If
 
         'detect left arrow key
         If keyData = Keys.Left Then 'dash left
-            If FS.PosY >= 290 Then
-                FS.PosY = 290
+            If FS.PosY >= 340 Then
+                FS.PosY = 340
                 FS.FDir = FaceDir.Right
                 FS.Vx = -50
 
@@ -444,8 +460,8 @@ Public Class Form1
 
         'detect right arrow key
         If keyData = Keys.Right Then ' dash right
-            If FS.PosY >= 290 Then
-                FS.PosY = 290
+            If FS.PosY >= 340 Then
+                FS.PosY = 340
                 FS.FDir = FaceDir.Left
                 FS.State(StateSplitMushroom.Charge, 3)
 
@@ -460,8 +476,8 @@ Public Class Form1
         input = e.KeyCode
         Select Case input
             Case 32 'spacebar
-                If FS.PosY >= 290 Then
-                    FS.PosY = 290
+                If FS.PosY >= 340 Then
+                    FS.PosY = 340
                     FS.State(StateSplitMushroom.DownAttack, 8)
 
                 End If
@@ -473,10 +489,10 @@ Public Class Form1
         Dim Fire As CFireProjectile
         Fire = New CFireProjectile
         If FS.FDir = FaceDir.Left Then
-            Fire.PosX = FS.PosX - 20
+            Fire.PosX = FS.PosX - 52
             Fire.FDir = FaceDir.Left
         Else
-            Fire.PosX = FS.PosX + 20
+            Fire.PosX = FS.PosX + 52
             Fire.FDir = FaceDir.Right
         End If
         Fire.PosY = FS.PosY - 3
@@ -489,9 +505,9 @@ Public Class Form1
         Else
             Fire.CurrState = StateFireballs.Create2
         End If
-        Fire.ArrSprites(0) = FlameStagJump
-        Fire.ArrSprites(1) = FlameStagJump
-        Fire.ArrSprites(2) = FlameStagDash
+        Fire.ArrSprites(0) = DownFireBall
+        Fire.ArrSprites(1) = UpFireBall
+
 
         ListChar.Add(Fire)
 
