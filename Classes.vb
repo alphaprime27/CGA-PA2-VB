@@ -3,6 +3,7 @@ Imports System.IO
 Public Enum StateSplitMushroom
     Intro
     Jump
+    JumpDown
     Uppercut
     Death
     Charge
@@ -12,8 +13,6 @@ Public Enum StateSplitMushroom
     DownAttack
     UpAttack
     Dash
-    MMWalk
-    MMAttacked
     SmackDown
     Fall
 End Enum
@@ -25,21 +24,13 @@ Public Enum FaceDir
 End Enum
 Public Enum StateFireballs
     Create
+    Create2
     Go
+    Go2
     ClimbUp
     Destroy
 End Enum
-Public Class CFireProjectile
-    Inherits CCharacter
-    Public CurrState As StateFireballs
-    Public Sub State(state As StateFireballs, idxspr As Integer)
-        CurrState = state
-        IdxArrSprites = idxspr
-        CurrFrame = 0
-        FrameIdx = 0
-    End Sub
 
-End Class
 Public Class CImage
     Public Width As Integer
     Public Height As Integer
@@ -134,8 +125,8 @@ Public Class CImage
     Sub CopyImg(ByRef Img As CImage)
         'copies image to Img
         Img = New CImage
-        Img.Width = Width
-        Img.Height = Height
+        Img.Width = 597
+        Img.Height = 441
         ReDim Img.Elmt(Width - 1, Height - 1)
 
         For i = 0 To Width - 1
@@ -147,8 +138,14 @@ Public Class CImage
     End Sub
 
 End Class
+Public Class character
+    Public Overridable Sub Update()
+
+    End Sub
+End Class
 
 Public Class CCharacter
+    Inherits character
     Public PosX, PosY As Double
     Public Vx, Vy As Double
     Public CurrState As StateSplitMushroom
@@ -160,8 +157,6 @@ Public Class CCharacter
     Public ok As Integer
     Public Destroy As Boolean = False
 
-
-    Public Const gravity = 1
     Public Sub State(state As StateSplitMushroom, idxspr As Integer)
         CurrState = state
         IdxArrSprites = idxspr
@@ -182,6 +177,7 @@ Public Class CCharacter
         End If
 
     End Sub
+
     Public Sub GetNextMove(a As StateSplitMushroom, idx As Integer)
         CurrFrame = CurrFrame + 1
         If CurrFrame = ArrSprites(IdxArrSprites).Elmt(FrameIdx).MaxFrameTime Then
@@ -194,21 +190,16 @@ Public Class CCharacter
             CurrFrame = 0
 
         End If
-
     End Sub
 
-    Public Sub Update()
-
-
+    Public Overrides Sub Update()
         Select Case CurrState
 
             Case StateSplitMushroom.Intro
                 GetNextFrame()
-                If FrameIdx = 10 And CurrFrame = 1 Then
+                If FrameIdx = 4 And CurrFrame = 1 Then
                     State(StateSplitMushroom.Stand, 6)
                 End If
-                'GetNextMove(StateSplitMushroom.Stand, 6)
-
 
             Case StateSplitMushroom.Jump
                 PosX = PosX + Vx
@@ -221,16 +212,16 @@ Public Class CCharacter
 
                     FDir = FaceDir.Left
                     State(StateSplitMushroom.Jump, 7)
-                    Vx = -10
-                    Vy = 2
+                    Vx = -40
+                    Vy = -8
 
 
                 End If
                 If PosX <= 100 Then
                     State(StateSplitMushroom.Jump, 7)
                     FDir = FaceDir.Right
-                    Vx = 10
-                    Vy = 2
+                    Vx = 80
+                    Vy = -8
 
 
                 End If
@@ -244,17 +235,14 @@ Public Class CCharacter
                     Vy = 0
                     PosY = 290
                 End If
-            Case StateSplitMushroom.Charge
-                GetNextFrame()
 
-                GetNextMove(StateSplitMushroom.Dash, 10)
 
             Case StateSplitMushroom.Fall
                 GetNextFrame()
                 PosX = PosX + Vx
                 PosY = PosY + Vy
                 Vx = 0
-                Vy = 10
+                Vy = 50
                 If PosY > 280 Then
                     State(StateSplitMushroom.Stand, 6)
                     Vx = 0
@@ -265,10 +253,13 @@ Public Class CCharacter
                 PosX = PosX + Vx
                 GetNextFrame()
 
+
                 If PosX >= 500 Then
                     FDir = FaceDir.Left
                     PosX = 490
                     State(StateSplitMushroom.Stand, 6)
+
+
 
                 End If
                 If PosX <= 100 Then
@@ -289,64 +280,155 @@ Public Class CCharacter
             Case StateSplitMushroom.Charge
                 GetNextFrame()
                 State(StateSplitMushroom.Dash, 10)
-
-            Case StateSplitMushroom.MMAttacked
+            Case StateSplitMushroom.JumpDown
                 GetNextFrame()
+                If FDir = FaceDir.Left Then
+                    State(StateSplitMushroom.JumpDown, 7)
+                    Vx = -40
+                    Vy = 8
+                End If
+
+                If PosX >= 500 Then
+
+                        FDir = FaceDir.Left
+                        State(StateSplitMushroom.JumpDown, 7)
+                    Vx = -40
+                    Vy = 8
+                End If
+
+
+                If PosX <= 100 Then
+                    State(StateSplitMushroom.JumpDown, 7)
+                    FDir = FaceDir.Right
+                    Vx = 40
+                    Vy = 8
+
+
+                End If
+                If PosY > 290 Then
+                    State(StateSplitMushroom.Landing, 4)
+                    Vx = 0
+                    Vy = 0
+                    PosY = 290
+                End If
+
+
+
+
+
         End Select
 
     End Sub
 
 End Class
+Public Class CFireProjectile
+    Inherits CCharacter
+    Public CurrState As StateFireballs
+    Public Overloads Sub State(state As StateFireballs, idxspr As Integer)
+        CurrState = state
+        IdxArrSprites = idxspr
+        CurrFrame = 0
+        FrameIdx = 0
+    End Sub
+    Public Overrides Sub Update()
+        Select Case CurrState
+            Case StateFireballs.Create
+                GetNextFrame()
+                PosX = PosX + Vx
 
+                State(StateFireballs.Go, 1)
+
+            Case StateFireballs.Go
+                GetNextFrame()
+                PosX = PosX + Vx
+                If FDir = FaceDir.Left And PosX <= 100 Or FDir = FaceDir.Right And PosX >= 500 Then
+                    Destroy = True
+                End If
+                If FDir = FaceDir.Left Then
+                    Vx = -40
+                Else
+                    Vx = 40
+                End If
+            Case StateFireballs.Create2
+                GetNextFrame()
+                PosX = PosX + Vx
+                State(StateFireballs.Go2, 1)
+
+            Case StateFireballs.Go2
+                GetNextFrame()
+                PosX = PosX + Vx
+                If FDir = FaceDir.Left And PosX <= 100 Or FDir = FaceDir.Right And PosX >= 500 Then
+                    State(StateFireballs.ClimbUp, 1)
+                End If
+                If FDir = FaceDir.Left Then
+                    Vx = -40
+                Else
+                    Vx = 40
+                End If
+            Case StateFireballs.ClimbUp
+                GetNextFrame()
+                PosY = PosY + Vy
+                Vy = -40
+                If PosY < -50 Then
+                    Destroy = True
+                End If
+
+
+
+
+
+        End Select
+    End Sub
+
+End Class
 
 Public Class CElmtFrame
-    Public CtrPoint As TPoint
-    Public Top, Bottom, Left, Right As Integer
-    Public Idx As Integer
-    Public MaxFrameTime As Integer
+  Public CtrPoint As TPoint
+  Public Top, Bottom, Left, Right As Integer
+  Public Idx As Integer
+  Public MaxFrameTime As Integer
 
-    Public Sub New(ctrx As Integer, ctry As Integer, l As Integer, t As Integer, r As Integer, b As Integer, mft As Integer)
-        CtrPoint.x = ctrx
-        CtrPoint.y = ctry
-        Top = t
-        Bottom = b
-        Left = l
-        Right = r
-        MaxFrameTime = mft
+  Public Sub New(ctrx As Integer, ctry As Integer, l As Integer, t As Integer, r As Integer, b As Integer, mft As Integer)
+    CtrPoint.x = ctrx
+    CtrPoint.y = ctry
+    Top = t
+    Bottom = b
+    Left = l
+    Right = r
+    MaxFrameTime = mft
 
-    End Sub
+  End Sub
 End Class
 
 Public Class CArrFrame
-    Public N As Integer
-    Public Elmt As CElmtFrame()
+  Public N As Integer
+  Public Elmt As CElmtFrame()
 
-    Public Sub New()
-        N = 0
-        ReDim Elmt(-1)
-    End Sub
+  Public Sub New()
+    N = 0
+    ReDim Elmt(-1)
+  End Sub
 
-    Public Overloads Sub Insert(E As CElmtFrame)
-        ReDim Preserve Elmt(N)
-        Elmt(N) = E
-        N = N + 1
-    End Sub
+  Public Overloads Sub Insert(E As CElmtFrame)
+    ReDim Preserve Elmt(N)
+    Elmt(N) = E
+    N = N + 1
+  End Sub
 
+  Public Overloads Sub Insert(ctrx As Integer, ctry As Integer, l As Integer, t As Integer, r As Integer, b As Integer, mft As Integer)
+    Dim E As CElmtFrame
+    E = New CElmtFrame(ctrx, ctry, l, t, r, b, mft)
+    ReDim Preserve Elmt(N)
+    Elmt(N) = E
+    N = N + 1
 
-    Public Overloads Sub Insert(ctrx As Integer, ctry As Integer, l As Integer, t As Integer, r As Integer, b As Integer, mft As Integer)
-        Dim E As CElmtFrame
-        E = New CElmtFrame(ctrx, ctry, l, t, r, b, mft)
-        ReDim Preserve Elmt(N)
-        Elmt(N) = E
-        N = N + 1
-
-    End Sub
+  End Sub
 
 End Class
 
-
 Public Structure TPoint
-    Dim x As Integer
-    Dim y As Integer
+  Dim x As Integer
+  Dim y As Integer
 
 End Structure
+
