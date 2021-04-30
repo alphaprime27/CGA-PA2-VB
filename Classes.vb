@@ -15,6 +15,8 @@ Public Enum StateSplitMushroom
     Dash
     SmackDown
     Fall
+    StanceOnTheGround
+    StanceOnTheWall
 End Enum
 'FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit,
 'FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown
@@ -197,7 +199,7 @@ Public Class CCharacter
 
             Case StateSplitMushroom.Intro
                 GetNextFrame()
-                If FrameIdx = 4 And CurrFrame = 1 Then
+                If FrameIdx = 10 And CurrFrame = 1 Then
                     State(StateSplitMushroom.Stand, 6)
                 End If
 
@@ -210,7 +212,7 @@ Public Class CCharacter
                 GetNextFrame()
                 If PosX >= 500 Then
 
-                    FDir = FaceDir.Left
+
                     State(StateSplitMushroom.Jump, 7)
                     Vx = -40
                     Vy = -8
@@ -218,8 +220,8 @@ Public Class CCharacter
 
                 End If
                 If PosX <= 100 Then
-                    State(StateSplitMushroom.Jump, 7)
-                    FDir = FaceDir.Right
+                    State(StateSplitMushroom.StanceOnTheWall, 13)
+
                     Vx = 80
                     Vy = -8
 
@@ -236,7 +238,13 @@ Public Class CCharacter
                     PosY = 290
                 End If
 
-
+            Case StateSplitMushroom.StanceOnTheWall
+                GetNextFrame()
+                PosX = PosX + 0
+                PosY = PosY + 0
+                If FrameIdx = 3 And CurrFrame = 1 Then
+                    State(StateSplitMushroom.Stand, 6)
+                End If
             Case StateSplitMushroom.Fall
                 GetNextFrame()
                 PosX = PosX + Vx
@@ -277,9 +285,15 @@ Public Class CCharacter
                 GetNextMove(StateSplitMushroom.Stand, 6)
             Case StateSplitMushroom.Landing
                 GetNextMove(StateSplitMushroom.Stand, 6)
+
             Case StateSplitMushroom.Charge
                 GetNextFrame()
-                State(StateSplitMushroom.Dash, 10)
+                GetNextMove(StateSplitMushroom.Dash, 10)
+
+            Case StateSplitMushroom.StanceOnTheGround
+                GetNextFrame()
+                GetNextMove(StateSplitMushroom.Jump, 7)
+
             Case StateSplitMushroom.JumpDown
                 GetNextFrame()
                 If FDir = FaceDir.Left Then

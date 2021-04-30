@@ -6,7 +6,7 @@ Public Class Form1
     Dim Bg, Bg1, Img As CImage
     Dim SpriteMap, SpriteMapMegaMan As CImage
     Dim SpriteMask, SpriteMaskMegaMan As CImage
-    Dim DownFireBall, MegamanAttacked, MegamanAttack, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
+    Dim DownFireBall, FlameStagStanceOnTheWall, FlameStagStanceOnTheGround, MegamanAttacked, MegamanAttack, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
     Dim FS, MM, MMF, FSF As CCharacter
     Dim ListChar As New List(Of CCharacter)
     Dim x As Boolean
@@ -38,9 +38,13 @@ Public Class Form1
 
         'FlameStagJump.Insert(37 * 2, 53 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 1)
         FlameStagJump.Insert(104 * 2, 53 * 2, 77 * 2, 27 * 2, 139 * 2, 74 * 2, 1)
-        'FlameStagJump.Insert(149* 2, 43* 2, 125* 2, 13* 2, 176* 2, 71* 2, 1)
-        'FlameStagJump.Insert(210* 2, 45* 2, 183* 2, 16* 2, 236* 2, 72* 2, 1)
-        'FlameStagJump.Insert(284* 2, 41* 2, 252* 2, 13* 2, 304* 2, 70* 2, 1)
+
+
+        FlameStagStanceOnTheWall = New CArrFrame
+        FlameStagStanceOnTheWall.Insert(168 * 2, 44 * 2, 148 * 2, 13 * 2, 186 * 2, 74 * 2, 3)
+        FlameStagStanceOnTheWall.Insert(220 * 2, 44 * 2, 195 * 2, 13 * 2, 246 * 2, 71 * 2, 3)
+        FlameStagStanceOnTheWall.Insert(279 * 2, 44 * 2, 253 * 2, 16 * 2, 306 * 2, 72 * 2, 3)
+        FlameStagStanceOnTheWall.Insert(353 * 2, 41 * 2, 322 * 2, 13 * 2, 37 * 24, 70 * 2, 3)
 
         FlameStagLanding = New CArrFrame
         FlameStagLanding.Insert(30 * 2, 125 * 2, 13 * 2, 92 * 2, 51 * 2, 158 * 2, 1)
@@ -165,6 +169,10 @@ Public Class Form1
         MegamanAttacked.Insert(133 * 2, 776 * 2, 111 * 2, 748 * 2, 154 * 2, 792 * 2, 1)
         MegamanAttacked.Insert(183 * 2, 776 * 2, 162 * 2, 749 * 2, 205 * 2, 788 * 2, 1)
 
+        FlameStagStanceOnTheGround = New CArrFrame
+
+        FlameStagStanceOnTheGround.Insert(37 * 2, 53 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 10)
+
         MM = New CCharacter
         ReDim MM.ArrSprites(3)
         MM.ArrSprites(0) = MegamanStand
@@ -173,7 +181,7 @@ Public Class Form1
         MM.ArrSprites(3) = MegamanAttacked
 
         FS = New CCharacter
-        ReDim FS.ArrSprites(11)
+        ReDim FS.ArrSprites(13)
 
         FS.ArrSprites(0) = FlameStagIntro
         FS.ArrSprites(1) = FlameStagUppercut
@@ -187,6 +195,8 @@ Public Class Form1
         FS.ArrSprites(9) = FlameStagUpAttack
         FS.ArrSprites(10) = FlameStagDash
         FS.ArrSprites(11) = FlameStagSmackDown
+        FS.ArrSprites(12) = FlameStagStanceOnTheGround
+        FS.ArrSprites(13) = FlameStagStanceOnTheWall
 
         FS.PosX = 460
         FS.PosY = 290
@@ -402,11 +412,11 @@ Public Class Form1
             If FS.FDir = FaceDir.Left Then
                 FS.Vx = -40
                 FS.Vy = -8
-                FS.State(StateSplitMushroom.Jump, 7)
+                FS.State(StateSplitMushroom.StanceOnTheGround, 12)
             ElseIf FS.FDir = FaceDir.Right Then
                 FS.Vx = 40
                 FS.Vy = -8
-                FS.State(StateSplitMushroom.Jump, 7)
+                FS.State(StateSplitMushroom.StanceOnTheGround, 12)
 
             End If
         End If
