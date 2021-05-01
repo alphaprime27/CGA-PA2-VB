@@ -313,7 +313,18 @@ Public Class CCharacter
                 GetNextMove(StateSplitMushroom.Stand, 6)
             Case StateSplitMushroom.Charge
                 GetNextFrame()
-                State(StateSplitMushroom.Dash, 10)
+                'State(StateSplitMushroom.Dash, 10)
+                If FrameIdx = 1 And CurrFrame = 4 Then
+                    If FDir = FaceDir.Left Then
+                        FDir = FaceDir.Right
+                        State(StateSplitMushroom.Dash, 10)
+                    Else
+                        FDir = FaceDir.Left
+                        State(StateSplitMushroom.Dash, 10)
+                    End If
+                End If
+
+
 
             Case StateSplitMushroom.JumpDown
                 GetNextFrame()
