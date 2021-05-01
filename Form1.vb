@@ -9,9 +9,12 @@ Public Class Form1
     Dim DownFireBall, MegamanGetHit, MegamanAttack, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagStanceOnTheGround, FlameStagUppercut, FlameStagStanceOnTheWall, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
     Dim FS, MM As CCharacter
     Dim ListChar As New List(Of CCharacter)
-    Dim x As Boolean
+    Dim A As Boolean
     Dim second As Integer
-
+    Dim second3 As Integer = 4
+    Dim second2 As Integer = 0
+    Dim MMFire As CMMFireProjectile
+    Dim Fire As CFireProjectile
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'open image for background, assign to bg
         'My.Computer.Audio.Play("C:\Users\ASUS\Downloads\sprite animation v1\bin\Debug\Undertale - Megalovania.mp3")
@@ -120,14 +123,14 @@ Public Class Form1
         FlameStagCharge.Insert(880 * 2, 44 * 2, 857 * 2, 16 * 2, 906 * 2, 67 * 2, 5)
 
         FlameStagDeath = New CArrFrame
-        FlameStagDeath.Insert(1656, 250, 1602, 180, 1688, 300, 1)
-        FlameStagDeath.Insert(1666, 250, 1710, 192, 1802, 296, 1)
+        FlameStagDeath.Insert(1656 * 2, 250 * 2, 1602 * 2, 180 * 2, 1688 * 2, 300 * 2, 1)
+        FlameStagDeath.Insert(1666 * 2, 250 * 2, 1710 * 2, 192 * 2, 1802 * 2, 296 * 2, 1)
 
         FlameStagGetHit = New CArrFrame
-        FlameStagGetHit.Insert(977, 45, 950, 14, 1003, 68, 1)
+        FlameStagGetHit.Insert(830 * 2, 201 * 2, 803 * 2, 171 * 2, 856 * 2, 224 * 2, 2)
 
         FlameStagStand = New CArrFrame
-        FlameStagStand.Insert(68, 406, 16, 352, 116, 450, 1)
+        FlameStagStand.Insert(66, 406, 16, 352, 116, 450, 1)
         ' FlameStagStand.Insert(827 * 2, 44 * 2, 801 * 2, 15 * 2, 852 * 2, 67 * 2, 1)
 
         DownFireBall = New CArrFrame
@@ -171,10 +174,10 @@ Public Class Form1
         MegaManFireBall.Insert(225 * 2, 705 * 2, 220 * 2, 700 * 2, 231 * 2, 709 * 2, 1)
 
         MegamanGetHit = New CArrFrame
-        MegamanGetHit.Insert(35 * 2, 776 * 2, 18 * 2, 748 * 2, 55 * 2, 793 * 2, 1)
-        MegamanGetHit.Insert(80 * 2, 776 * 2, 61 * 2, 748 * 2, 104 * 2, 792 * 2, 1)
-        MegamanGetHit.Insert(133 * 2, 776 * 2, 111 * 2, 748 * 2, 154 * 2, 792 * 2, 1)
-        MegamanGetHit.Insert(183 * 2, 776 * 2, 162 * 2, 749 * 2, 205 * 2, 788 * 2, 1)
+        MegamanGetHit.Insert(35 * 2, 776 * 2, 18 * 2, 748 * 2, 55 * 2, 793 * 2, 3)
+        MegamanGetHit.Insert(80 * 2, 776 * 2, 61 * 2, 748 * 2, 104 * 2, 792 * 2, 3)
+        MegamanGetHit.Insert(133 * 2, 776 * 2, 111 * 2, 748 * 2, 154 * 2, 792 * 2, 3)
+        MegamanGetHit.Insert(183 * 2, 776 * 2, 162 * 2, 749 * 2, 205 * 2, 788 * 2, 3)
 
         MM = New CCharacter
         ReDim MM.ArrSprites(3)
@@ -218,7 +221,19 @@ Public Class Form1
         MM.FDir = FaceDir.Left
         ListChar.Add(MM)
         'bmp2 = New Bitmap(Img.Width, Img.Height)
+        MMFire = New CMMFireProjectile
 
+        ReDim MMFire.ArrSprites(1)
+        MMFire.CurrState = StateMMFireballs.CreateMM
+        MMFire.ArrSprites(0) = MegaManFireBall
+        ListChar.Add(MMFire)
+
+        Fire = New CFireProjectile
+        ReDim Fire.ArrSprites(2)
+        Fire.ArrSprites(0) = DownFireBall
+        Fire.ArrSprites(1) = UpFireBall
+
+        ListChar.Add(Fire)
         DisplayImg()
         'DisplayImgMegaMan()
         ResizeImg()
@@ -343,29 +358,6 @@ Public Class Form1
         'Me.Width = PictureBox1.Width + 30
         'Me.Height = PictureBox1.Height + 100
     End Sub
-
-    'Sub DisplayImgMegaMan()
-    '    'display bg and sprite on picturebox
-    '    Dim i, j As Integer
-    '    PutSpriteMegaMan(MM)
-
-    '    For i = 0 To Img.Width - 1
-    '        For j = 0 To Img.Height - 1
-    '            bmp.SetPixel(i, j, Img.Elmt(i, j))
-    '        Next
-    '    Next
-
-
-    '    PictureBox1.Image = bmp
-    '    PictureBox1.Width = bmp.Width
-    '    PictureBox1.Height = bmp.Height
-    '    PictureBox1.Top = 0
-    '    PictureBox1.Left = 0
-    '    'Me.Width = PictureBox1.Width + 30
-    '    'Me.Height = PictureBox1.Height + 100
-
-    'End Sub
-
     Sub ResizeImg()
         Dim w, h As Integer
         w = PictureBox1.Width
@@ -373,44 +365,7 @@ Public Class Form1
         Me.ClientSize = New Size(w, h)
 
     End Sub
-    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
-        PictureBox1.Refresh()
-        second = second + 1
-        If second >= 3 Then
-            MM.State(StateMegaMan.MMStand, 0)
-        End If
-        For Each CC In ListChar
-            CC.Update()
-        Next
-        'collision part
-        x = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
-        If x Then
-            ' MM.State(StateSplitMushroom.MMAttacked, 3)
-            MM.PosX = 400
-        End If
 
-        'creating fireballs
-        If FS.CurrState = StateSplitMushroom.DownAttack And FS.FrameIdx = 9 Then
-            CreateFireball(1)
-        ElseIf FS.CurrState = StateSplitMushroom.UpAttack And FS.FrameIdx = 5 Then
-            CreateFireball(2)
-        End If
-
-        Dim Listchar1 As New List(Of CCharacter)
-        For Each CC In ListChar
-            If Not CC.Destroy Then
-                Listchar1.Add(CC)
-            End If
-        Next
-
-        ListChar = Listchar1
-
-        DisplayImg()
-        FS.Update()
-        MM.Update()
-        DisplayImg()
-        'DisplayImgMegaMan()
-    End Sub
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
         'detect up arrow key
         If keyData = Keys.Up Then
@@ -486,41 +441,74 @@ Public Class Form1
     End Sub
     Private Sub Form1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
         If e.KeyChar = ChrW(Keys.D) Or e.KeyChar = Char.ToLower(ChrW(Keys.D)) Then
-
-            MM.FDir = FaceDir.Left
+            If MM.CurrState = StateMegaMan.MMStand Then
+                MM.FDir = FaceDir.Left
                 MM.State(StateMegaMan.MMWalk, 1)
                 MM.Vx = 25
-
                 MM.PosX = MM.PosX + MM.Vx
-
                 MM.Vx = 0
                 second = 0
-
-
             End If
-        If e.KeyChar = ChrW(Keys.A) Or e.KeyChar = Char.ToLower(ChrW(Keys.A)) Then
 
-            MM.FDir = FaceDir.Right
-            MM.State(StateMegaMan.MMWalk, 1)
+        End If
+            If e.KeyChar = ChrW(Keys.A) Or e.KeyChar = Char.ToLower(ChrW(Keys.A)) Then
+            If MM.CurrState = StateMegaMan.MMStand Then
+                MM.FDir = FaceDir.Right
+                MM.State(StateMegaMan.MMWalk, 1)
                 MM.Vx = -25
                 MM.PosX = MM.PosX + MM.Vx
                 MM.Vx = 0
                 second = 0
-
             End If
+        End If
 
         If e.KeyChar = ChrW(Keys.S) Or e.KeyChar = Char.ToLower(ChrW(Keys.S)) Then
-
             MM.State(StateMegaMan.MMAttack, 2)
             second = 0
 
         End If
 
     End Sub
-    Sub CreateFireball(i As Integer)
 
-        Dim Fire As CFireProjectile
+    Sub CreateMMFireball()
+
+        MMFire = New CMMFireProjectile
+
+        ReDim MMFire.ArrSprites(1)
+        MMFire.CurrState = StateMMFireballs.CreateMM
+
+        MMFire.ArrSprites(0) = MegaManFireBall
+
+        ListChar.Add(MMFire)
+
+        If MM.FDir = FaceDir.Right Then
+            MMFire.PosX = MM.PosX - 80
+            MMFire.FDir = FaceDir.Left
+        Else
+            MMFire.PosX = MM.PosX + 80
+            MMFire.FDir = FaceDir.Right
+        End If
+        MMFire.PosY = MM.PosY - 9
+        MMFire.Vy = 0
+
+        If MM.FDir = FaceDir.Right Then
+            MMFire.Vx = -40
+        Else
+            MMFire.Vx = 40
+        End If
+
+
+    End Sub
+
+    Sub CreateFireball(i As Integer)
         Fire = New CFireProjectile
+        ReDim Fire.ArrSprites(2)
+        Fire.ArrSprites(0) = DownFireBall
+        Fire.ArrSprites(1) = UpFireBall
+
+        ListChar.Add(Fire)
+
+
         If FS.FDir = FaceDir.Left Then
             Fire.PosX = FS.PosX - 80
             Fire.FDir = FaceDir.Left
@@ -537,21 +525,98 @@ Public Class Form1
         Else
             Fire.Vx = 40
         End If
-        ReDim Fire.ArrSprites(2)
+
         If i = 1 Then
             Fire.CurrState = StateFireballs.Create
         Else
             Fire.CurrState = StateFireballs.Create2
         End If
-        Fire.ArrSprites(0) = DownFireBall
-        Fire.ArrSprites(1) = UpFireBall
 
-        ListChar.Add(Fire)
 
     End Sub
 
 
+    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        PictureBox1.Refresh()
+        second = second + 1
+        second2 = second2 + 1
+        second3 = second3 + 1
 
+        If second = 3 Then
+            MM.State(StateMegaMan.MMStand, 0)
+        End If
+        If second2 = 2 Then
+            FS.State(StateSplitMushroom.Stand, 6)
+
+        End If
+
+        If second3 = 4 Then
+            MM.Destroy = True
+        End If
+        For Each CC In ListChar
+            CC.Update()
+        Next
+        'collision part
+
+        'x = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
+        If CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM) Then
+            ' MM.State(StateSplitMushroom.MMAttacked, 3)
+            MM.State(StateMegaMan.MMGetHit, 3)
+            second3 = 0
+
+        End If
+
+        If CollisionDetection(Fire.ArrSprites(Fire.IdxArrSprites).Elmt(Fire.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), Fire, MM) Then
+            MM.State(StateMegaMan.MMGetHit, 3)
+            Fire.Destroy = True
+            second3 = 0
+
+        End If
+
+        A = CollisionDetection(MMFire.ArrSprites(MMFire.IdxArrSprites).Elmt(MMFire.FrameIdx), FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MMFire, FS)
+        If A = True Then
+            MMFire.Destroy = True
+            second2 = 0
+            FS.State(StateSplitMushroom.GetHit, 5)
+
+            If FS.FDir = FaceDir.Left Then
+                FS.PosX = FS.PosX + 1
+
+            ElseIf FS.FDir = FaceDir.Right Then
+                FS.PosX = FS.PosX - 1
+            End If
+            A = False
+
+        End If
+
+        'creating fireballs
+        If FS.CurrState = StateSplitMushroom.DownAttack And FS.FrameIdx = 9 Then
+            CreateFireball(1)
+        ElseIf FS.CurrState = StateSplitMushroom.UpAttack And FS.FrameIdx = 5 Then
+            CreateFireball(2)
+        End If
+
+        If MM.CurrState = StateMegaMan.MMAttack And MM.FrameIdx = 3 Then
+            CreateMMFireball()
+        End If
+
+
+        Dim Listchar1 As New List(Of CCharacter)
+
+        For Each CC In ListChar
+            If Not CC.Destroy Then
+                Listchar1.Add(CC)
+            End If
+        Next
+
+        ListChar = Listchar1
+
+        DisplayImg()
+        FS.Update()
+        MM.Update()
+        DisplayImg()
+        'DisplayImgMegaMan()
+    End Sub
 
 
 End Class

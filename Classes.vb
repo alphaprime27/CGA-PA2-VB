@@ -38,7 +38,17 @@ Public Enum StateFireballs
     Go2
     ClimbUp
     Destroy
+
 End Enum
+
+Public Enum StateMMFireballs
+
+    CreateMM
+    GoMM
+    Destroy
+
+End Enum
+
 
 Public Class CImage
     Public Width As Integer
@@ -458,6 +468,12 @@ Public Class CCharacter
 
             Case StateSplitMushroom.JumpStance ' ========================================> JUMP STANCE 12
                 GetNextMove(StateSplitMushroom.Jump, 7)
+
+            Case StateSplitMushroom.GetHit
+                'GetNextFrame()
+                'State(StateSplitMushroom.Stand, 6)
+                GetNextMove(StateSplitMushroom.Stand, 6)
+
             Case StateMegaMan.MMStand
                 GetNextFrame()
                 'PosX = PosX
@@ -468,10 +484,11 @@ Public Class CCharacter
                 'GetNextFrame()
 
             Case StateMegaMan.MMAttack
-                GetNextMove(StateMegaMan.MMStand, 0)
+                GetNextFrame()
                 'GetNextFrame()
-
-
+            Case StateMegaMan.MMGetHit
+                'GetNextMove(StateMegaMan.MMStand, 0)
+                GetNextFrame()
         End Select
 
     End Sub
@@ -533,7 +550,39 @@ Public Class CFireProjectile
 
 
 
+        End Select
+    End Sub
 
+End Class
+
+Public Class CMMFireProjectile
+    Inherits CCharacter
+    Public CurrState As StateMMFireballs
+    Public Overloads Sub State(state As StateMMFireballs, idxspr As Integer)
+        CurrState = state
+        IdxArrSprites = idxspr
+        CurrFrame = 0
+        FrameIdx = 0
+    End Sub
+    Public Overrides Sub Update()
+        Select Case CurrState
+
+            Case StateMMFireballs.CreateMM
+                GetNextFrame()
+                PosX = PosX + Vx
+                State(StateMMFireballs.GoMM, 0)
+
+            Case StateMMFireballs.GoMM
+                GetNextFrame()
+                PosX = PosX + Vx
+                If FDir = FaceDir.Left And PosX <= 80 Or FDir = FaceDir.Right And PosX >= 510 Then
+                    Destroy = True
+                End If
+                If FDir = FaceDir.Left Then
+                    Vx = -40
+                Else
+                    Vx = 40
+                End If
 
         End Select
     End Sub
