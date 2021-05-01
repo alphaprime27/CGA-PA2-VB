@@ -18,6 +18,13 @@ Public Enum StateSplitMushroom
     ChangeStance
     JumpStance
 End Enum
+
+Public Enum StateMegaMan
+    MMStand
+    MMWalk
+    MMAttack
+    MMGetHit
+End Enum
 'FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit,
 'FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown
 Public Enum FaceDir
@@ -299,7 +306,7 @@ Public Class CCharacter
                     Vy = 20
                     State(StateSplitMushroom.SmackDown, 11)
                 ElseIf PosY < 90 Then
-                If PosX >= 500 Then
+                    If PosX >= 500 Then
                         PosX = 500
 
                         FDir = FaceDir.Right
@@ -397,7 +404,7 @@ Public Class CCharacter
                     End If
 
                 End If
-                    Case StateSplitMushroom.Landing ' ========================================> LANDING 4
+            Case StateSplitMushroom.Landing ' ========================================> LANDING 4
                 godown = False
                 GetNextMove(StateSplitMushroom.Stand, 6)
             Case StateSplitMushroom.Charge ' ========================================> CHARGE 3
@@ -451,8 +458,18 @@ Public Class CCharacter
 
             Case StateSplitMushroom.JumpStance ' ========================================> JUMP STANCE 12
                 GetNextMove(StateSplitMushroom.Jump, 7)
+            Case StateMegaMan.MMStand
+                GetNextFrame()
+                'PosX = PosX
 
+            Case StateMegaMan.MMWalk
+                'PosX = PosX + Vx
+                GetNextFrame()
+                'GetNextFrame()
 
+            Case StateMegaMan.MMAttack
+                GetNextMove(StateMegaMan.MMStand, 0)
+                'GetNextFrame()
 
 
         End Select
@@ -471,6 +488,7 @@ Public Class CFireProjectile
     End Sub
     Public Overrides Sub Update()
         Select Case CurrState
+
             Case StateFireballs.Create
                 GetNextFrame()
                 PosX = PosX + Vx
