@@ -450,7 +450,7 @@ Public Class Form1
         If keyData = Keys.Left Then 'dash left
             If FS.PosY >= 340 Then
                 FS.PosY = 340
-                FS.FDir = FaceDir.Right
+                FS.FDir = FaceDir.Left
                 FS.Vx = -50
 
                 FS.State(StateSplitMushroom.Charge, 3)
@@ -462,7 +462,7 @@ Public Class Form1
         If keyData = Keys.Right Then ' dash right
             If FS.PosY >= 340 Then
                 FS.PosY = 340
-                FS.FDir = FaceDir.Left
+                FS.FDir = FaceDir.Right
                 FS.State(StateSplitMushroom.Charge, 3)
 
                 FS.Vx = 50
