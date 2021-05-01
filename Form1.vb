@@ -93,8 +93,9 @@ Public Class Form1
         FlameStagUpAttack.Insert(315 * 2, 330 * 2, 279 * 2, 296 * 2, 341 * 2, 355 * 2, 1)
         FlameStagUpAttack.Insert(374 * 2, 330 * 2, 350 * 2, 296 * 2, 399 * 2, 355 * 2, 1)
 
+
         FlameStagSmackDown = New CArrFrame
-        FlameStagSmackDown.Insert(227, 505, 212, 472, 244, 545, 1)
+        FlameStagSmackDown.Insert(227 * 2, 505 * 2, 212 * 2, 472 * 2, 244 * 2, 545 * 2, 1)
 
         FlameStagDash = New CArrFrame
         FlameStagDash.Insert(48 * 2, 398 * 2, 10 * 2, 362 * 2, 80 * 2, 428 * 2, 1)
@@ -454,6 +455,7 @@ Public Class Form1
                 FS.FDir = FaceDir.Left
                 FS.Vx = -50
 
+                FS.doSmackDown = True
                 FS.State(StateSplitMushroom.Charge, 3)
 
             End If
@@ -464,6 +466,8 @@ Public Class Form1
             If FS.PosY >= 340 Then
                 FS.PosY = 340
                 FS.FDir = FaceDir.Right
+
+                FS.doSmackDown = True
                 FS.State(StateSplitMushroom.Charge, 3)
 
                 FS.Vx = 50
@@ -524,8 +528,6 @@ Public Class Form1
         End If
         Fire.ArrSprites(0) = DownFireBall
         Fire.ArrSprites(1) = UpFireBall
-
-
         ListChar.Add(Fire)
 
     End Sub
