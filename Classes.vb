@@ -159,6 +159,7 @@ Public Class CCharacter
     Public ok As Integer
     Public Destroy As Boolean = False
     Public godown As Boolean = False
+    Public doUppercut As Boolean = False
 
     Public Sub State(state As StateSplitMushroom, idxspr As Integer)
         CurrState = state
@@ -198,13 +199,13 @@ Public Class CCharacter
     Public Overrides Sub Update()
         Select Case CurrState
 
-            Case StateSplitMushroom.Intro
+            Case StateSplitMushroom.Intro '===============================>'INTRO
                 GetNextFrame()
                 If FrameIdx = 4 And CurrFrame = 1 Then
                     State(StateSplitMushroom.Stand, 6)
                 End If
 
-            Case StateSplitMushroom.Jump
+            Case StateSplitMushroom.Jump '=================================>'JUMP
                 PosX = PosX + Vx
                 PosY = PosY + Vy
                 'Vy = Vy + 0.2
@@ -240,7 +241,7 @@ Public Class CCharacter
                     Vy = 0
                     PosY = 340
                 End If
-            Case StateSplitMushroom.ChangeStance
+            Case StateSplitMushroom.ChangeStance ' ========================================> CHANGE STANCE
                 If godown = True Then
                     GetNextFrame()
                     If FrameIdx = 0 And CurrFrame = 0 Then
@@ -258,6 +259,26 @@ Public Class CCharacter
                         End If
                         State(StateSplitMushroom.JumpDown, 7)
                     End If
+                ElseIf doUppercut = True Then
+                    GetNextFrame()
+                    If FrameIdx = 1 And CurrFrame = 0 Then
+
+                        If PosX >= 500 Then
+                            PosX = 500
+                            Vx = 0
+                            Vy = -20
+                            FDir = FaceDir.Right
+
+                        ElseIf PosX <= 100 Then
+                            PosX = 100
+                            Vx = 0
+                            Vy = -20
+                            FDir = FaceDir.Left
+                        End If
+                        State(StateSplitMushroom.Uppercut, 1)
+                    End If
+
+
                 Else
                     GetNextFrame()
                     If FrameIdx = 0 And CurrFrame = 0 Then
@@ -270,7 +291,27 @@ Public Class CCharacter
                     End If
                 End If
 
-            Case StateSplitMushroom.Fall
+            Case StateSplitMushroom.Uppercut ' ========================================> UPPERCUT
+                GetNextFrame()
+                PosY = PosY + Vy
+                If PosY < 90 Then
+                    If PosX >= 500 Then
+                        PosX = 500
+
+                        FDir = FaceDir.Right
+                    ElseIf PosX <= 100 Then
+                        PosX = 100
+
+                        FDir = FaceDir.Left
+                    End If
+                    godown = True
+                    doUppercut = False
+                    State(StateSplitMushroom.ChangeStance, 13)
+                    FrameIdx = 3
+                End If
+
+
+            Case StateSplitMushroom.Fall ' ========================================> FALL
                 GetNextFrame()
                 PosX = PosX + Vx
                 PosY = PosY + Vy
@@ -282,7 +323,7 @@ Public Class CCharacter
                     Vy = 0
                     PosY = 340
                 End If
-            Case StateSplitMushroom.Dash
+            Case StateSplitMushroom.Dash ' ========================================> DASH
                 PosX = PosX + Vx
                 GetNextFrame()
 
@@ -301,17 +342,17 @@ Public Class CCharacter
                     FDir = FaceDir.Right
 
                 End If
-            Case StateSplitMushroom.DownAttack
+            Case StateSplitMushroom.DownAttack ' ========================================> DOWN ATTACK
 
                 GetNextMove(StateSplitMushroom.UpAttack, 9)
 
 
-            Case StateSplitMushroom.UpAttack
+            Case StateSplitMushroom.UpAttack ' ========================================> UP ATTACK
                 GetNextMove(StateSplitMushroom.Stand, 6)
-            Case StateSplitMushroom.Landing
+            Case StateSplitMushroom.Landing ' ========================================> LANDING
                 godown = False
                 GetNextMove(StateSplitMushroom.Stand, 6)
-            Case StateSplitMushroom.Charge
+            Case StateSplitMushroom.Charge ' ========================================> CHARGE
                 GetNextFrame()
                 'State(StateSplitMushroom.Dash, 10)
                 If FrameIdx = 1 And CurrFrame = 4 Then
@@ -326,7 +367,7 @@ Public Class CCharacter
 
 
 
-            Case StateSplitMushroom.JumpDown
+            Case StateSplitMushroom.JumpDown ' ========================================> JUMP DOWN
                 GetNextFrame()
                 PosX = PosX + Vx
                 PosY = PosY + Vy
@@ -360,7 +401,7 @@ Public Class CCharacter
 
 
 
-            Case StateSplitMushroom.JumpStance
+            Case StateSplitMushroom.JumpStance ' ========================================> JUMP STANCE
                 GetNextMove(StateSplitMushroom.Jump, 7)
 
 
