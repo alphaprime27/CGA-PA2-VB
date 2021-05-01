@@ -109,11 +109,12 @@ Public Class Form1
         FlameStagDash.Insert(1003 * 2, 398 * 2, 905 * 2, 360 * 2, 1034 * 2, 428 * 2, 1)
         FlameStagDash.Insert(1225 * 2, 398 * 2, 1041 * 2, 360 * 2, 1255 * 2, 428 * 2, 1)
 
+
         FlameStagUppercut = New CArrFrame
-        FlameStagUppercut.Insert(38 * 2, 510 * 2, 15, 479, 52, 544, 1)
-        FlameStagUppercut.Insert(72 * 2, 510 * 2, 58, 474, 87, 545, 1)
-        FlameStagUppercut.Insert(108 * 2, 510 * 2, 94, 471, 123, 545, 1)
-        FlameStagUppercut.Insert(163 * 2, 492 * 2, 132, 451, 193, 546, 1)
+        FlameStagUppercut.Insert(38 * 2, 510 * 2, 15 * 2, 479 * 2, 52 * 2, 544 * 2, 1)
+        FlameStagUppercut.Insert(72 * 2, 510 * 2, 58 * 2, 474 * 2, 87 * 2, 545 * 2, 1)
+        FlameStagUppercut.Insert(108 * 2, 510 * 2, 94 * 2, 471 * 2, 123 * 2, 545 * 2, 1)
+        FlameStagUppercut.Insert(163 * 2, 492 * 2, 132 * 2, 451 * 2, 193 * 2, 546 * 2, 10)
 
         FlameStagCharge = New CArrFrame
         FlameStagCharge.Insert(827 * 2, 44 * 2, 801 * 2, 15 * 2, 852 * 2, 67 * 2, 5)
@@ -474,6 +475,7 @@ Public Class Form1
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         Dim input As String
         input = e.KeyCode
+
         Select Case input
             Case 32 'spacebar
                 If FS.PosY >= 340 Then
@@ -481,6 +483,21 @@ Public Class Form1
                     FS.State(StateSplitMushroom.DownAttack, 8)
 
                 End If
+            Case Keys.Z
+                If FS.PosY >= 340 Then
+                    FS.doUppercut = True
+                    If FS.FDir = FaceDir.Left Then
+                        FS.Vx = -40
+                        FS.Vy = -8
+                        FS.State(StateSplitMushroom.JumpStance, 12)
+                    ElseIf FS.FDir = FaceDir.Right Then
+                        FS.Vx = 40
+                        FS.Vy = -8
+                        FS.State(StateSplitMushroom.JumpStance, 12)
+                    End If
+                End If
+
+
 
         End Select
     End Sub
