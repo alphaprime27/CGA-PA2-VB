@@ -46,3 +46,14 @@ C:\Users\ASUS\Downloads\sprite animation v1\obj\Debug\WindowsApplication56.vbpro
 C:\Users\ASUS\Downloads\sprite animation v1\obj\Debug\WindowsApplication56.exe
 C:\Users\ASUS\Downloads\sprite animation v1\obj\Debug\WindowsApplication56.xml
 C:\Users\ASUS\Downloads\sprite animation v1\obj\Debug\WindowsApplication56.pdb
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\bin\Debug\WindowsApplication56.exe
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\bin\Debug\WindowsApplication56.pdb
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\bin\Debug\WindowsApplication56.xml
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication56.vbprojAssemblyReference.cache
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication1.Form1.resources
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication1.Resources.resources
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication56.vbproj.GenerateResource.cache
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication56.vbproj.CoreCompileInputs.cache
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication56.exe
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication56.xml
+C:\Users\ASUS\Downloads\CGA-PA2-VB-main\obj\Debug\WindowsApplication56.pdb
