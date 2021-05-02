@@ -38,17 +38,7 @@ Public Enum StateFireballs
     Go2
     ClimbUp
     Destroy
-
 End Enum
-
-Public Enum StateMMFireballs
-
-    CreateMM
-    GoMM
-    Destroy
-
-End Enum
-
 
 Public Class CImage
     Public Width As Integer
@@ -244,20 +234,22 @@ Public Class CCharacter
                     PosX = 100
                     State(StateSplitMushroom.ChangeStance, 13)
                     'FDir = FaceDir.Right
-                    Vx = 80
+                    Vx = 40
                     Vy = -8
 
 
                 End If
-                If PosY < 100 Then
-                    State(StateSplitMushroom.Fall, 2)
+
+                If PosY < 50 Then
+                    godown = True
 
                 End If
-                If PosY > 340 Then
+                If PosY >= 340 Then
+                    PosY = 340
                     State(StateSplitMushroom.Landing, 4)
                     Vx = 0
                     Vy = 0
-                    PosY = 340
+
                 End If
             Case StateSplitMushroom.ChangeStance ' ========================================> CHANGE STANCE 13
                 If godown = True Then
@@ -360,20 +352,20 @@ Public Class CCharacter
             Case StateSplitMushroom.Dash ' ========================================> DASH 10
                 PosX = PosX + Vx
                 GetNextFrame()
-                If doSmackDown = True Then
-                    If PosX <= 200 Or PosX >= 450 Then 'collision detection should replace this 
-                        Vx = 0
-                        Vy = 0
-                        If FDir = FaceDir.Left Then
-                            FDir = FaceDir.Right
-                        Else
-                            FDir = FaceDir.Left
-                        End If
-                        State(StateSplitMushroom.UpAttack, 9)
+                'If doSmackDown = True Then
+                '    If PosX <= 200 Or PosX >= 450 Then 'collision detection should replace this 
+                '        Vx = 0
+                '        Vy = 0
+                '        If FDir = FaceDir.Left Then
+                '            FDir = FaceDir.Right
+                '        Else
+                '            FDir = FaceDir.Left
+                '        End If
+                ''        State(StateSplitMushroom.UpAttack, 9)
 
 
-                    End If
-                End If
+                '    End If
+                'End If
 
 
                 If PosX >= 500 Then
@@ -468,12 +460,6 @@ Public Class CCharacter
 
             Case StateSplitMushroom.JumpStance ' ========================================> JUMP STANCE 12
                 GetNextMove(StateSplitMushroom.Jump, 7)
-
-            Case StateSplitMushroom.GetHit
-                'GetNextFrame()
-                'State(StateSplitMushroom.Stand, 6)
-                GetNextMove(StateSplitMushroom.Stand, 6)
-
             Case StateMegaMan.MMStand
                 GetNextFrame()
                 'PosX = PosX
@@ -484,11 +470,10 @@ Public Class CCharacter
                 'GetNextFrame()
 
             Case StateMegaMan.MMAttack
-                GetNextFrame()
+                GetNextMove(StateMegaMan.MMStand, 0)
                 'GetNextFrame()
-            Case StateMegaMan.MMGetHit
-                'GetNextMove(StateMegaMan.MMStand, 0)
-                GetNextFrame()
+
+
         End Select
 
     End Sub
@@ -550,39 +535,7 @@ Public Class CFireProjectile
 
 
 
-        End Select
-    End Sub
 
-End Class
-
-Public Class CMMFireProjectile
-    Inherits CCharacter
-    Public CurrState As StateMMFireballs
-    Public Overloads Sub State(state As StateMMFireballs, idxspr As Integer)
-        CurrState = state
-        IdxArrSprites = idxspr
-        CurrFrame = 0
-        FrameIdx = 0
-    End Sub
-    Public Overrides Sub Update()
-        Select Case CurrState
-
-            Case StateMMFireballs.CreateMM
-                GetNextFrame()
-                PosX = PosX + Vx
-                State(StateMMFireballs.GoMM, 0)
-
-            Case StateMMFireballs.GoMM
-                GetNextFrame()
-                PosX = PosX + Vx
-                If FDir = FaceDir.Left And PosX <= 80 Or FDir = FaceDir.Right And PosX >= 510 Then
-                    Destroy = True
-                End If
-                If FDir = FaceDir.Left Then
-                    Vx = -40
-                Else
-                    Vx = 40
-                End If
 
         End Select
     End Sub
