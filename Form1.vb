@@ -33,7 +33,7 @@ Public Class Form1
 
 
         Bg = New CImage
-        Bg.OpenImage("background2.bmp")
+        Bg.OpenImage("background.bmp")
         Bg.CopyImg(Img)
         Bg.CopyImg(Bg1)
 
@@ -263,10 +263,15 @@ Public Class Form1
         DisplayImg()
         'DisplayImgMegaMan()
         ResizeImg()
-
+        PlayLoopingBackgroundSoundResource()
         Timer1.Enabled = True
 
     End Sub
+    Sub PlayLoopingBackgroundSoundResource()
+        My.Computer.Audio.Play(My.Resources.FlameStag,
+          AudioPlayMode.BackgroundLoop)
+    End Sub
+
     Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
 
