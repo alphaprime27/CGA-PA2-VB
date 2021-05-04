@@ -7,7 +7,8 @@ Public Class Form1
     Dim SpriteMap As CImage
     Dim SpriteMask As CImage
     Dim DownFireBall, MegamanGetHit, MegamanAttack, MegamanGetBurned, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagStanceOnTheGround, FlameStagUppercut, FlameStagStanceOnTheWall, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
-    Dim FS, MM As CCharacter
+    Dim FS As CCharacter
+    Dim MM As CMegamen
     Dim ListChar As New List(Of CCharacter)
     Dim x As Boolean
     Dim second As Integer
@@ -189,7 +190,7 @@ Public Class Form1
         MegamanGetBurned.Insert(271 * 2, 826 * 2, 245 * 2, 800 * 2, 289 * 2, 855 * 2, 1)
         MegamanGetBurned.Insert(327 * 2, 826 * 2, 299 * 2, 797 * 2, 344 * 2, 855 * 2, 1)
 
-        MM = New CCharacter
+        MM = New CMegamen
         ReDim MM.ArrSprites(13)
         MM.ArrSprites(0) = MegamanStand
         MM.ArrSprites(1) = MegamanWalk
@@ -263,7 +264,7 @@ Public Class Form1
         DisplayImg()
         'DisplayImgMegaMan()
         ResizeImg()
-        PlayLoopingBackgroundSoundResource()
+        'PlayLoopingBackgroundSoundResource()
         Timer1.Enabled = True
 
     End Sub
@@ -514,6 +515,7 @@ Public Class Form1
             End Select
         End If
         If MM.CurrState = StateMegaMan.MMStand Then
+
             Select Case input
                 Case Keys.D
                     If MM.CurrState = StateMegaMan.MMStand Then
@@ -521,6 +523,7 @@ Public Class Form1
                         MM.State(StateMegaMan.MMWalk, 1)
                         MM.Vx = 25
                         MM.PosX = MM.PosX + MM.Vx
+
 
                         MM.Vx = 0
                         second = 0
@@ -588,7 +591,7 @@ Public Class Form1
         L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX
         R1 = frame1.Right - frame1.CtrPoint.x + object1.PosX
 
-        MM = New CCharacter
+        MM = New CMegamen
         ReDim MM.ArrSprites(13)
         MM.ArrSprites(0) = MegamanStand
         MM.ArrSprites(1) = MegamanWalk
@@ -774,9 +777,12 @@ Public Class Form1
         x = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
         If x Then
             ' mm.state(statesplitmushroom.mmattacked, 3)
-            MM.State(StateMegaMan.MMGetHit, 3)
-            second4 = 0
+            'MM.State(StateMegaMan.MMGetHit, 3)
+            'second4 = 0
+            If FS.CurrState <> StateSplitMushroom.Uppercut Or FS.CurrState <> StateSplitMushroom.SmackDown Then
+                MM.State(StateMegaMan.MMGetHit, 3)
 
+            End If
         End If
 
 
@@ -788,6 +794,12 @@ Public Class Form1
                 FS.FDir = FaceDir.Left
             End If
             FS.State(StateSplitMushroom.UpAttack, 9)
+            MM.State(StateMegaMan.MMGetHit, 3)
+            MM.Vy = -20
+            MM.Vx = 0
+
+            'MM.PosY = MM.PosY + MM.Vy
+            ' second4 = 0
         End If
 
 
