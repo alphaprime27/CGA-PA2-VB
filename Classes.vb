@@ -157,8 +157,8 @@ Public Class CImage
     Sub CopyImg(ByRef Img As CImage)
         'copies image to Img
         Img = New CImage
-        Img.Width = 597
-        Img.Height = 441
+        Img.Width = 606
+        Img.Height = 440
         ReDim Img.Elmt(Width - 1, Height - 1)
 
         For i = 0 To Width - 1
@@ -240,6 +240,7 @@ Public Class CCharacter
                 PosX = PosX + Vx
                 PosY = PosY + Vy
                 'Vy = Vy + 0.2
+                Vy = -30
 
 
                 GetNextFrame()
@@ -248,8 +249,8 @@ Public Class CCharacter
                     State(StateSplitMushroom.ChangeStance, 13)
                     'FDir = FaceDir.Left
 
-                    Vx = -40
-                    Vy = -8
+                    Vx = -90
+                    'Vy = -90
 
 
                 End If
@@ -257,8 +258,8 @@ Public Class CCharacter
                     PosX = 100
                     State(StateSplitMushroom.ChangeStance, 13)
                     'FDir = FaceDir.Right
-                    Vx = 40
-                    Vy = -8
+                    Vx = 90
+                    ' Vy = -90
 
 
                 End If
@@ -275,21 +276,24 @@ Public Class CCharacter
 
                 End If
             Case StateSplitMushroom.ChangeStance ' ========================================> CHANGE STANCE 13
+                PosY = PosY + Vy
+                Vy = 0.3
                 If godown = True Then
                     GetNextFrame()
                     If FrameIdx = 0 And CurrFrame = 0 Then
 
                         If PosX >= 500 Then
                             PosX = 490
-                            Vx = -40
-                            Vy = 8
+                            Vx = -90
+
                             FDir = FaceDir.Left
                         ElseIf PosX <= 100 Then
                             PosX = 110
-                            Vx = 40
-                            Vy = 8
+                            Vx = 90
+
                             FDir = FaceDir.Right
                         End If
+                        Vy = 10
                         State(StateSplitMushroom.JumpDown, 7)
                     End If
                 ElseIf doUppercut = True Then
@@ -439,11 +443,12 @@ Public Class CCharacter
                 GetNextFrame()
                 PosX = PosX + Vx
                 PosY = PosY + Vy
+                Vy = 15
 
                 If PosX >= 500 Then
                     PosX = 500
-                    Vx = -40
-                    Vy = 8
+                    Vx = -90
+                    'Vy = 8
                     FDir = FaceDir.Right
                     State(StateSplitMushroom.ChangeStance, 13)
 
@@ -452,8 +457,8 @@ Public Class CCharacter
 
                 If PosX <= 100 Then
                     PosX = 100
-                    Vx = 40
-                    Vy = 8
+                    Vx = 90
+                    'Vy = 8
                     State(StateSplitMushroom.ChangeStance, 13)
                     FDir = FaceDir.Left
 
