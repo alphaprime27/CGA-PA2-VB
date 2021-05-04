@@ -330,7 +330,7 @@ Public Class CCharacter
 
             Case StateSplitMushroom.Uppercut ' ========================================> UPPERCUT 1 
                 GetNextFrame()
-                PosY = PosY - 90
+                PosY = PosY + Vy
                 If PosY < 90 And doSmackDown = True Then
                     Vy = 90
                     State(StateSplitMushroom.SmackDown, 11)
@@ -480,26 +480,6 @@ Public Class CCharacter
             Case StateSplitMushroom.GetHit ' ========================================> JUMP STANCE 12
                 GetNextFrame()
 
-            Case StateMegaMan.MMStand
-                GetNextFrame()
-                'PosX = PosX
-
-            Case StateMegaMan.MMWalk
-                PosY = 730
-                GetNextFrame()
-                'GetNextFrame()
-
-            Case StateMegaMan.MMAttack
-                GetNextMove(StateMegaMan.MMStand, 0)
-                'GetNextFrame()
-
-            Case StateMegaMan.MMGetHit
-                GetNextFrame()
-
-            Case StateMegaMan.MMGetBurned
-                GetNextFrame()
-            Case StateMegaMan.MMGetSmackedDown
-                GetNextFrame()
 
         End Select
 
@@ -602,6 +582,7 @@ Public Class CMMFireProjectile
         CurrFrame = 0
         FrameIdx = 0
     End Sub
+
     Public Overrides Sub Update()
         Select Case CurrState
 
@@ -623,6 +604,99 @@ Public Class CMMFireProjectile
                 End If
 
         End Select
+    End Sub
+
+End Class
+Public Class CMegamen ' =========================>Megamen
+    Inherits CCharacter
+    Public HitAnimation As Boolean = False
+    Public Overloads Sub State(state As StateMegaMan, idxspr As Integer)
+        CurrState = state
+        IdxArrSprites = idxspr
+        CurrFrame = 0
+        FrameIdx = 0
+
+    End Sub
+
+    Public Overloads Sub GetNextMove(a As StateMegaMan, idx As Integer)
+        CurrFrame = CurrFrame + 1
+        If CurrFrame = ArrSprites(IdxArrSprites).Elmt(FrameIdx).MaxFrameTime Then
+            FrameIdx = FrameIdx + 1
+            If FrameIdx = ArrSprites(IdxArrSprites).N Then
+                CurrFrame = 0
+                FrameIdx = 0
+                State(a, idx)
+            End If
+            CurrFrame = 0
+
+        End If
+    End Sub
+    Public Overrides Sub Update()
+        Select Case CurrState
+
+            Case StateMegaMan.MMStand
+                GetNextFrame()
+                'PosX = PosX
+
+            Case StateMegaMan.MMWalk
+                PosY = 730
+                GetNextFrame()
+                'GetNextFrame()
+
+            Case StateMegaMan.MMAttack
+                GetNextMove(StateMegaMan.MMStand, 0)
+                'GetNextFrame()
+
+            Case StateMegaMan.MMGetHit
+                If PosY < 235 Then
+                    Vy = 90
+                    Vx = 0
+
+                End If
+                PosX = PosX + Vx
+                PosY = PosY + Vy
+                Vy = Vy + 0.4
+
+                GetNextFrame()
+                If HitAnimation = True Then
+                    If PosX < 300 Then
+                        Vx = Vx + 1
+                        Vy = Vy + 1
+                    Else
+                        Vx = Vx - 1
+                        Vy = Vy + 1
+                    End If
+
+                    If PosY > 720 Then
+                            PosY = 720
+                            Vx = 0
+                            Vy = 0
+                            HitAnimation = False
+                            State(StateMegaMan.MMStand, 0)
+                        End If
+                    ElseIf PosY >= 720 And PosX < 300 Then
+                        PosY = 720
+                    Vx = 10
+                    Vy = -10
+                    FDir = FaceDir.Right
+                    HitAnimation = True
+                    ElseIf PosY >= 720 And PosX >= 300 Then
+                        PosY = 720
+                    Vx = -10
+                    Vy = -10
+                    FDir = FaceDir.Left
+                    HitAnimation = True
+                End If
+
+
+
+            Case StateMegaMan.MMGetBurned
+                GetNextFrame()
+            Case StateMegaMan.MMGetSmackedDown
+                GetNextFrame()
+        End Select
+
+
     End Sub
 
 End Class
