@@ -275,15 +275,15 @@ Public Class Form1
     Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
 
-        L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX
-        R1 = frame1.Right - frame1.CtrPoint.x + object1.PosX
-        T1 = frame1.Top - frame1.CtrPoint.y + object1.PosY
-        B1 = frame1.Bottom - frame1.CtrPoint.y + object1.PosY
+        L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX - 30
+        R1 = frame1.Right - frame1.CtrPoint.x + object1.PosX - 30
+        T1 = frame1.Top - frame1.CtrPoint.y + object1.PosY - 30
+        B1 = frame1.Bottom - frame1.CtrPoint.y + object1.PosY - 30
 
-        L2 = frame2.Left - frame2.CtrPoint.x + object2.PosX
-        R2 = frame2.Right - frame2.CtrPoint.x + object2.PosX
-        T2 = frame2.Top - frame2.CtrPoint.y + object2.PosY
-        B2 = frame2.Bottom - frame2.CtrPoint.y + object2.PosY
+        L2 = frame2.Left - frame2.CtrPoint.x + object2.PosX - 30
+        R2 = frame2.Right - frame2.CtrPoint.x + object2.PosX - 30
+        T2 = frame2.Top - frame2.CtrPoint.y + object2.PosY - 30
+        B2 = frame2.Bottom - frame2.CtrPoint.y + object2.PosY - 30
 
         If L2 < R1 And L1 < R2 And T1 < B2 And T2 < B1 Then
             Return True
@@ -428,12 +428,12 @@ Public Class Form1
         'detect up arrow key
         If keyData = Keys.Up And FS.CurrState = StateSplitMushroom.Stand Then
             If FS.FDir = FaceDir.Left Then
-                FS.Vx = -40
-                FS.Vy = -8
+                FS.Vx = -90
+                FS.Vy = -30
                 FS.State(StateSplitMushroom.JumpStance, 12)
             ElseIf FS.FDir = FaceDir.Right Then
-                FS.Vx = 40
-                FS.Vy = -8
+                FS.Vx = 90
+                FS.Vy = -30
                 FS.State(StateSplitMushroom.JumpStance, 12)
 
             End If
