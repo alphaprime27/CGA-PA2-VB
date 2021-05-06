@@ -225,12 +225,14 @@ Public Class Form1
         FS.ArrSprites(12) = FlameStagStanceOnTheGround
         FS.ArrSprites(13) = FlameStagStanceOnTheWall
 
-        FS.PosX = 460
-        FS.PosY = 710
-        FS.Vx = 0
-        FS.Vy = 0
-        FS.State(StateSplitMushroom.Intro, 0)
-        FS.FDir = FaceDir.Left
+        FS.PosX = 100
+        FS.PosY = 370
+        FS.Vx = 55
+        FS.Vy = 20
+        FS.godown = True
+        FS.dointro = True
+        FS.State(StateSplitMushroom.JumpDown, 7)
+        FS.FDir = FaceDir.Right
 
         bmp = New Bitmap(Img.Width, Img.Height)
         ListChar.Add(FS)
@@ -753,7 +755,7 @@ Public Class Form1
             MM.State(StateMegaMan.MMStand, 0)
         End If
         If second2 = 3 Then
-            FS.State(StateSplitMushroom.Stand, 6)
+            'FS.State(StateSplitMushroom.Stand, 6)
 
 
         End If
