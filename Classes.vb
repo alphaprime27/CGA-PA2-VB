@@ -189,6 +189,7 @@ Public Class CCharacter
     Public ok As Integer
     Public Destroy As Boolean = False
     Public godown As Boolean = False
+    Public dointro As Boolean = False
     Public doUppercut As Boolean = False
     Public doSmackDown As Boolean = False
 
@@ -422,8 +423,18 @@ Public Class CCharacter
 
                 End If
             Case StateSplitMushroom.Landing ' ========================================> LANDING 4
-                godown = False
-                GetNextMove(StateSplitMushroom.Stand, 6)
+               GetNextFrame()
+                If godown = True Then
+                    If dointro = True Then
+                        State(StateSplitMushroom.Intro, 0)
+                        godown = False
+                        dointro = False
+                    ElseIf dointro = False Then
+                        godown = False
+                        State(StateSplitMushroom.Stand, 6)
+                    End If
+                End If
+
             Case StateSplitMushroom.Charge ' ========================================> CHARGE 3
                 GetNextFrame()
                 'State(StateSplitMushroom.Dash, 10)
