@@ -6,7 +6,7 @@ Public Class Form1
     Dim Bg, Bg1, Img As CImage
     Dim SpriteMap As CImage
     Dim SpriteMask As CImage
-    Dim DownFireBall, MegamanGetHit, MegamanAttack, MegamanGetBurned, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagStanceOnTheGround, FlameStagUppercut, FlameStagStanceOnTheWall, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
+    Dim DownFireBall, MegamanGetSmackDowned, MegamanGetUppercutted, MegamanGetHit, MegamanAttack, MegamanGetBurned, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagStanceOnTheGround, FlameStagUppercut, FlameStagStanceOnTheWall, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
     Dim FS As CCharacter
     Dim MM As CMegamen
     Dim ListChar As New List(Of CCharacter)
@@ -14,7 +14,7 @@ Public Class Form1
     Dim second As Integer
     Dim second3 As Integer = 99
     Dim second4 As Integer = 99
-    Dim second2 As Integer
+    Dim second2 As Integer = 99
 
     Dim MMFire As CMMFireProjectile
     Dim DownFire As CDownFireProjectile
@@ -34,12 +34,12 @@ Public Class Form1
 
 
         Bg = New CImage
-        Bg.OpenImage("background.bmp")
+        Bg.OpenImage("background_2.bmp")
         Bg.CopyImg(Img)
         Bg.CopyImg(Bg1)
 
         SpriteMap = New CImage
-        SpriteMap.OpenImage("flamestag4.bmp")
+        SpriteMap.OpenImage("flamestagbaru.bmp")
         SpriteMap.CreateMask(SpriteMask)
 
         'initialize sprites
@@ -183,12 +183,21 @@ Public Class Form1
         MegamanGetHit.Insert(133 * 2, 776 * 2, 111 * 2, 748 * 2, 154 * 2, 792 * 2, 1)
         MegamanGetHit.Insert(183 * 2, 776 * 2, 162 * 2, 749 * 2, 205 * 2, 788 * 2, 1)
 
-
         MegamanGetBurned = New CArrFrame
         MegamanGetBurned.Insert(178 * 2, 826 * 2, 153 * 2, 801 * 2, 192 * 2, 853 * 2, 1)
         MegamanGetBurned.Insert(225 * 2, 826 * 2, 200 * 2, 801 * 2, 240 * 2, 853 * 2, 1)
         MegamanGetBurned.Insert(271 * 2, 826 * 2, 245 * 2, 800 * 2, 289 * 2, 855 * 2, 1)
         MegamanGetBurned.Insert(327 * 2, 826 * 2, 299 * 2, 797 * 2, 344 * 2, 855 * 2, 1)
+
+        MegamanGetUppercutted = New CArrFrame
+        MegamanGetUppercutted.Insert(539 * 2, 768 * 2, 513 * 2, 754 * 2, 552 * 2, 797 * 2, 2)
+        MegamanGetUppercutted.Insert(539 * 2, 722 * 2, 513 * 2, 703 * 2, 557 * 2, 746 * 2, 2)
+        MegamanGetUppercutted.Insert(539 * 2, 671 * 2, 513 * 2, 653 * 2, 557 * 2, 697 * 2, 15)
+
+        MegamanGetSmackDowned = New CArrFrame
+        MegamanGetSmackDowned.Insert(602 * 2, 638 * 2, 588 * 2, 611 * 2, 627 * 2, 654 * 2, 2)
+        MegamanGetSmackDowned.Insert(602 * 2, 686 * 2, 584 * 2, 662 * 2, 628 * 2, 705 * 2, 2)
+        MegamanGetSmackDowned.Insert(602 * 2, 738 * 2, 584 * 2, 711 * 2, 628 * 2, 755 * 2, 15)
 
         MM = New CMegamen
         ReDim MM.ArrSprites(13)
@@ -198,8 +207,9 @@ Public Class Form1
         MM.ArrSprites(3) = MegamanGetHit
         MM.ArrSprites(4) = MegamanWalk
         MM.ArrSprites(5) = MegamanGetBurned
-        MM.ArrSprites(6) = MegamanStand
-        MM.ArrSprites(7) = MegamanStand
+        MM.ArrSprites(6) = MegamanGetUppercutted
+        MM.ArrSprites(7) = MegamanGetSmackDowned
+
         MM.ArrSprites(8) = MegamanStand
         MM.ArrSprites(9) = MegamanStand
         MM.ArrSprites(10) = MegamanStand
@@ -270,10 +280,10 @@ Public Class Form1
         Timer1.Enabled = True
 
     End Sub
-    Sub PlayLoopingBackgroundSoundResource()
-        My.Computer.Audio.Play(My.Resources.FlameStag,
-          AudioPlayMode.BackgroundLoop)
-    End Sub
+    'Sub PlayLoopingBackgroundSoundResource()
+    '    My.Computer.Audio.Play(My.Resources.FlameStag,
+    '      AudioPlayMode.BackgroundLoop)
+    'End Sub
 
     Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
@@ -283,10 +293,10 @@ Public Class Form1
         T1 = frame1.Top - frame1.CtrPoint.y + object1.PosY - 30
         B1 = frame1.Bottom - frame1.CtrPoint.y + object1.PosY - 30
 
-        L2 = frame2.Left - frame2.CtrPoint.x + object2.PosX - 30
-        R2 = frame2.Right - frame2.CtrPoint.x + object2.PosX - 30
-        T2 = frame2.Top - frame2.CtrPoint.y + object2.PosY - 30
-        B2 = frame2.Bottom - frame2.CtrPoint.y + object2.PosY - 30
+        L2 = frame2.Left - frame2.CtrPoint.x + object2.PosX + 50
+        R2 = frame2.Right - frame2.CtrPoint.x + object2.PosX + 50
+        T2 = frame2.Top - frame2.CtrPoint.y + object2.PosY + 50
+        B2 = frame2.Bottom - frame2.CtrPoint.y + object2.PosY + 50
 
         If L2 < R1 And L1 < R2 And T1 < B2 And T2 < B1 Then
             Return True
@@ -520,70 +530,46 @@ Public Class Form1
 
             Select Case input
                 Case Keys.D
-                    If MM.CurrState = StateMegaMan.MMStand Then
+                    If MM.CurrState = StateMegaMan.MMStand And FS.dointro = False Then
                         MM.FDir = FaceDir.Left
                         MM.State(StateMegaMan.MMWalk, 1)
                         MM.Vx = 25
-                        MM.PosX = MM.PosX + MM.Vx
+                        If MM.PosX >= 500 Then
+                            MM.PosX = MM.PosX + 0
+                        Else
+                            MM.PosX = MM.PosX + MM.Vx
+                        End If
+
 
 
                         MM.Vx = 0
                         second = 0
                     End If
                 Case Keys.A
-                    If MM.CurrState = StateMegaMan.MMStand Then
+                    If MM.CurrState = StateMegaMan.MMStand And FS.dointro = False Then
                         MM.FDir = FaceDir.Right
                         MM.State(StateMegaMan.MMWalk, 1)
                         MM.Vx = -25
-                        MM.PosX = MM.PosX + MM.Vx
+                        If MM.PosX <= 100 Then
+                            MM.PosX = MM.PosX + 0
+                        Else
+                            MM.PosX = MM.PosX + MM.Vx
+                        End If
 
                         MM.Vx = 0
                         second = 0
                     End If
                 Case Keys.S
-                    MM.State(StateMegaMan.MMAttack, 2)
-                    second = 0
+                    If MM.CurrState = StateMegaMan.MMStand And FS.dointro = False Then
+                        MM.State(StateMegaMan.MMAttack, 2)
+                        second = 0
+                    End If
+
             End Select
         End If
 
     End Sub
-    'Private Sub Form1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
-    '    If e.KeyChar = ChrW(Keys.D) Or e.KeyChar = Char.ToLower(ChrW(Keys.D)) Then
-
-    '        MM.FDir = FaceDir.Left
-    '        MM.State(StateMegaMan.MMWalk, 1)
-    '        MM.Vx = 25
-
-    '        MM.PosX = MM.PosX + MM.Vx
-
-    '        MM.Vx = 0
-    '        second = 0
-
-
-    '    End If
-    '    If e.KeyChar = ChrW(Keys.A) Or e.KeyChar = Char.ToLower(ChrW(Keys.A)) Then
-
-    '        MM.FDir = FaceDir.Right
-    '        MM.State(StateMegaMan.MMWalk, 1)
-    '        MM.Vx = -25
-    '        MM.PosX = MM.PosX + MM.Vx
-    '        MM.Vx = 0
-    '        second = 0
-
-    '    End If
-
-    '    If e.KeyChar = ChrW(Keys.S) Or e.KeyChar = Char.ToLower(ChrW(Keys.S)) Then
-
-    '        MM.State(StateMegaMan.MMAttack, 2)
-    '        second = 0
-
-    '    End If
-
-    'End Sub
     Public Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
-        ' by making Generator static, we preserve the same instance '
-        ' (i.e., do not create new instances with the same seed over and over) '
-        ' between calls '
         Static Generator As System.Random = New System.Random()
         Return Generator.Next(Min, Max)
     End Function
@@ -601,8 +587,8 @@ Public Class Form1
         MM.ArrSprites(3) = MegamanGetHit
         MM.ArrSprites(4) = MegamanWalk
         MM.ArrSprites(5) = MegamanGetBurned
-        MM.ArrSprites(6) = MegamanStand
-        MM.ArrSprites(7) = MegamanStand
+        MM.ArrSprites(6) = MegamanGetUppercutted
+        MM.ArrSprites(7) = MegamanGetSmackDowned
         MM.ArrSprites(8) = MegamanStand
         MM.ArrSprites(9) = MegamanStand
         MM.ArrSprites(10) = MegamanStand
@@ -628,7 +614,6 @@ Public Class Form1
     Sub CreateMMFireball()
 
         MMFire = New CMMFireProjectile
-
         ReDim MMFire.ArrSprites(1)
         MMFire.CurrState = StateMMFireballs.CreateMM
 
@@ -750,17 +735,18 @@ Public Class Form1
         second2 = second2 + 1
         second3 = second3 + 1
         second4 = second4 + 1
+        MM.DesSec = MM.DesSec + 1
 
         If second = 3 Then
             MM.State(StateMegaMan.MMStand, 0)
         End If
         If second2 = 3 Then
-            'FS.State(StateSplitMushroom.Stand, 6)
+            FS.State(StateSplitMushroom.Stand, 6)
 
 
         End If
 
-        If second3 = 3 Then
+        If second3 = 5 Then
             MegaManRespawn(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), FS)
             'second3 = 7
         End If
@@ -776,14 +762,26 @@ Public Class Form1
             second3 = 0
             'second4 = 4
         End If
+
         x = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
         If x Then
-            ' mm.state(statesplitmushroom.mmattacked, 3)
-            'MM.State(StateMegaMan.MMGetHit, 3)
-            'second4 = 0
-            If FS.CurrState <> StateSplitMushroom.Uppercut Or FS.CurrState <> StateSplitMushroom.SmackDown Then
+
+            If FS.CurrState <> StateSplitMushroom.Uppercut And FS.CurrState <> StateSplitMushroom.SmackDown And FS.CurrState <> StateSplitMushroom.UpAttack Then
                 MM.State(StateMegaMan.MMGetHit, 3)
 
+                If MM.DesSec = 5 Then
+
+                    second4 = 0
+                    MM.DesSec = 1
+
+                End If
+
+                If MM.DesSec = 0 Then
+
+                    second4 = -2
+                    MM.DesSec = 1
+
+                End If
             End If
         End If
 
@@ -796,9 +794,10 @@ Public Class Form1
                 FS.FDir = FaceDir.Left
             End If
             FS.State(StateSplitMushroom.UpAttack, 9)
-            MM.State(StateMegaMan.MMGetHit, 3)
-            MM.Vy = -20
-            MM.Vx = 0
+            MM.State(StateMegaMan.MMGetUppercutted, 6)
+
+
+
 
             'MM.PosY = MM.PosY + MM.Vy
             ' second4 = 0

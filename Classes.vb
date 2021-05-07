@@ -26,6 +26,7 @@ Public Enum StateMegaMan
     MMGetHit
     MMGetBurned
     MMGetSmackedDown
+    MMGetUppercutted
 End Enum
 'FlameStagJump, FlameStagUppercut, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit,
 'FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown
@@ -157,7 +158,7 @@ Public Class CImage
     Sub CopyImg(ByRef Img As CImage)
         'copies image to Img
         Img = New CImage
-        Img.Width = 606
+        Img.Width = 605
         Img.Height = 440
         ReDim Img.Elmt(Width - 1, Height - 1)
 
@@ -331,6 +332,7 @@ Public Class CCharacter
 
             Case StateSplitMushroom.Uppercut ' ========================================> UPPERCUT 1 
                 GetNextFrame()
+                Vy = -40
                 PosY = PosY + Vy
                 If PosY < 90 And doSmackDown = True Then
                     Vy = 90
@@ -621,6 +623,8 @@ End Class
 Public Class CMegamen ' =========================>Megamen
     Inherits CCharacter
     Public HitAnimation As Boolean = False
+    Public Hit As Boolean = False
+    Public DesSec As Integer = 99
     Public Overloads Sub State(state As StateMegaMan, idxspr As Integer)
         CurrState = state
         IdxArrSprites = idxspr
@@ -658,15 +662,25 @@ Public Class CMegamen ' =========================>Megamen
                 GetNextMove(StateMegaMan.MMStand, 0)
                 'GetNextFrame()
 
-            Case StateMegaMan.MMGetHit
-                If PosY < 235 Then
-                    Vy = 90
-                    Vx = 0
-
+            Case StateMegaMan.MMGetUppercutted
+                If PosY < 85 Then
+                    State(StateMegaMan.MMGetSmackedDown, 7)
                 End If
+                Vy = -30
+                Vx = 0
+
                 PosX = PosX + Vx
                 PosY = PosY + Vy
-                Vy = Vy + 0.4
+
+                GetNextFrame()
+
+
+            Case StateMegaMan.MMGetSmackedDown
+                Vy = 120
+                Vx = 0
+                PosX = PosX + Vx
+                PosY = PosY + Vy
+
 
                 GetNextFrame()
                 If HitAnimation = True Then
@@ -679,32 +693,76 @@ Public Class CMegamen ' =========================>Megamen
                     End If
 
                     If PosY > 720 Then
-                            PosY = 720
-                            Vx = 0
-                            Vy = 0
-                            HitAnimation = False
-                            State(StateMegaMan.MMStand, 0)
-                        End If
-                    ElseIf PosY >= 720 And PosX < 300 Then
                         PosY = 720
+                        Vx = 0
+                        Vy = 0
+                        HitAnimation = False
+                        State(StateMegaMan.MMStand, 0)
+                        DesSec = 0
+                    End If
+                ElseIf PosY >= 720 And PosX < 300 Then
+                    PosY = 720
                     Vx = 10
                     Vy = -10
                     FDir = FaceDir.Right
                     HitAnimation = True
-                    ElseIf PosY >= 720 And PosX >= 300 Then
-                        PosY = 720
+                ElseIf PosY >= 720 And PosX >= 300 Then
+                    PosY = 720
                     Vx = -10
                     Vy = -10
                     FDir = FaceDir.Left
                     HitAnimation = True
                 End If
 
+            Case StateMegaMan.MMGetHit
+
+                PosX = PosX + Vx
+                PosY = PosY + Vy
+                Vy = Vy + 0.4
+
+                GetNextFrame()
+                DesSec = 5
+                If HitAnimation = True Then
+                    If PosX < 300 Then
+                        Vx = Vx + 2
+                        Vy = Vy + 1
+                        DesSec = 0
+                    Else
+                        Vx = Vx - 2
+                        Vy = Vy + 1
+                        DesSec = 0
+                    End If
+
+                    If PosY > 720 Then
+                        PosY = 720
+                        Vx = 0
+                        Vy = 0
+                        HitAnimation = False
+                        State(StateMegaMan.MMStand, 0)
+
+
+                    End If
+                ElseIf PosY >= 720 And PosX < 300 Then
+                    PosY = 720
+                    Vx = 10
+                    Vy = -10
+                    FDir = FaceDir.Right
+                    HitAnimation = True
+
+                ElseIf PosY >= 720 And PosX >= 300 Then
+                    PosY = 720
+                    Vx = -10
+                    Vy = -10
+                    FDir = FaceDir.Left
+                    HitAnimation = True
+
+                End If
+
 
 
             Case StateMegaMan.MMGetBurned
                 GetNextFrame()
-            Case StateMegaMan.MMGetSmackedDown
-                GetNextFrame()
+
         End Select
 
 
