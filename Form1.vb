@@ -131,7 +131,7 @@ Public Class Form1
         FlameStagDeath.Insert(1666, 250, 1710, 192, 1802, 296, 1)
 
         FlameStagGetHit = New CArrFrame
-        FlameStagGetHit.Insert(830 * 2, 201 * 2, 803 * 2, 171 * 2, 856 * 2, 224 * 2, 2)
+        FlameStagGetHit.Insert(830 * 2, 201 * 2, 803 * 2, 171 * 2, 856 * 2, 224 * 2, 5)
 
         FlameStagStand = New CArrFrame
         FlameStagStand.Insert(66, 406, 16, 352, 116, 450, 1)
@@ -157,16 +157,16 @@ Public Class Form1
         MegamanStand.Insert(228 * 2, 600 * 2, 208 * 2, 574 * 2, 245 * 2, 618 * 2, 1)
 
         MegamanWalk = New CArrFrame
-        MegamanWalk.Insert(30 * 2, 654 * 2, 15 * 2, 628 * 2, 46 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(70 * 2, 654 * 2, 50 * 2, 628 * 2, 86 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(117 * 2, 654 * 2, 93 * 2, 628 * 2, 140 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(167 * 2, 654 * 2, 146 * 2, 629 * 2, 183 * 2, 668 * 2, 1)
-        MegamanWalk.Insert(207 * 2, 654 * 2, 192 * 2, 629 * 2, 222 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(241 * 2, 654 * 2, 229 * 2, 631 * 2, 258 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(284 * 2, 654 * 2, 269 * 2, 630 * 2, 298 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(330 * 2, 654 * 2, 310 * 2, 631 * 2, 351 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(376 * 2, 654 * 2, 360 * 2, 629 * 2, 393 * 2, 669 * 2, 1)
-        MegamanWalk.Insert(416 * 2, 654 * 2, 403 * 2, 631 * 2, 432 * 2, 669 * 2, 1)
+        MegamanWalk.Insert(30 * 2, 654 * 2, 15 * 2, 628 * 2, 46 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(70 * 2, 654 * 2, 50 * 2, 628 * 2, 86 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(117 * 2, 654 * 2, 93 * 2, 628 * 2, 140 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(167 * 2, 654 * 2, 146 * 2, 629 * 2, 183 * 2, 668 * 2, 2)
+        MegamanWalk.Insert(207 * 2, 654 * 2, 192 * 2, 629 * 2, 222 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(241 * 2, 654 * 2, 229 * 2, 631 * 2, 258 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(284 * 2, 654 * 2, 269 * 2, 630 * 2, 298 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(330 * 2, 654 * 2, 310 * 2, 631 * 2, 351 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(376 * 2, 654 * 2, 360 * 2, 629 * 2, 393 * 2, 669 * 2, 2)
+        MegamanWalk.Insert(416 * 2, 654 * 2, 403 * 2, 631 * 2, 432 * 2, 669 * 2, 2)
 
         MegamanAttack = New CArrFrame
         MegamanAttack.Insert(38 * 2, 711 * 2, 14 * 2, 685 * 2, 53 * 2, 727 * 2, 1)
@@ -241,7 +241,7 @@ Public Class Form1
         FS.Vy = 20
         FS.godown = True
         FS.dointro = True
-        FS.State(StateSplitMushroom.JumpDown, 7)
+        FS.State(StaeFlameStag.JumpDown, 7)
         FS.FDir = FaceDir.Right
 
         bmp = New Bitmap(Img.Width, Img.Height)
@@ -276,33 +276,58 @@ Public Class Form1
         DisplayImg()
         'DisplayImgMegaMan()
         ResizeImg()
-        'PlayLoopingBackgroundSoundResource()
+        PlayLoopingBackgroundSoundResource()
         Timer1.Enabled = True
 
     End Sub
-    'Sub PlayLoopingBackgroundSoundResource()
-    '    My.Computer.Audio.Play(My.Resources.FlameStag,
-    '      AudioPlayMode.BackgroundLoop)
-    'End Sub
+    Sub PlayLoopingBackgroundSoundResource() 'For playing songs
+        My.Computer.Audio.Play(My.Resources.Flamestag,
+          AudioPlayMode.BackgroundLoop)
+    End Sub
 
     Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
 
-        L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX - 30
-        R1 = frame1.Right - frame1.CtrPoint.x + object1.PosX - 30
-        T1 = frame1.Top - frame1.CtrPoint.y + object1.PosY - 30
-        B1 = frame1.Bottom - frame1.CtrPoint.y + object1.PosY - 30
+        L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX
+        R1 = frame1.Right - frame1.CtrPoint.x + object1.PosX
+        T1 = frame1.Top - frame1.CtrPoint.y + object1.PosY
+        B1 = frame1.Bottom - frame1.CtrPoint.y + object1.PosY
 
-        L2 = frame2.Left - frame2.CtrPoint.x + object2.PosX + 50
-        R2 = frame2.Right - frame2.CtrPoint.x + object2.PosX + 50
-        T2 = frame2.Top - frame2.CtrPoint.y + object2.PosY + 50
-        B2 = frame2.Bottom - frame2.CtrPoint.y + object2.PosY + 50
+        L2 = frame2.Left - frame2.CtrPoint.x + object2.PosX + 30
+        R2 = frame2.Right - frame2.CtrPoint.x + object2.PosX - 30
+        T2 = frame2.Top - frame2.CtrPoint.y + object2.PosY + 30
+        B2 = frame2.Bottom - frame2.CtrPoint.y + object2.PosY - 30
 
         If L2 < R1 And L1 < R2 And T1 < B2 And T2 < B1 Then
             Return True
         Else
             Return False
         End If
+
+
+
+    End Function
+
+    Public Function CollisionProjectileDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
+        Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
+
+        L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX
+        R1 = frame1.Right - frame1.CtrPoint.x + object1.PosX
+        T1 = frame1.Top - frame1.CtrPoint.y + object1.PosY
+        B1 = frame1.Bottom - frame1.CtrPoint.y + object1.PosY
+
+        L2 = frame2.Left - frame2.CtrPoint.x + object2.PosX
+        R2 = frame2.Right - frame2.CtrPoint.x + object2.PosX
+        T2 = frame2.Top - frame2.CtrPoint.y + object2.PosY
+        B2 = frame2.Bottom - frame2.CtrPoint.y + object2.PosY
+
+        If L2 < R1 And L1 < R2 And T1 < B2 And T2 < B1 Then
+            Return True
+        Else
+            Return False
+        End If
+
+
 
     End Function
 
@@ -439,57 +464,57 @@ Public Class Form1
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
         'detect up arrow key
-        If keyData = Keys.Up And FS.CurrState = StateSplitMushroom.Stand Then
+        If keyData = Keys.Up And FS.CurrState = StaeFlameStag.Stand Then
             If FS.FDir = FaceDir.Left Then
                 FS.Vx = -90
                 FS.Vy = -30
-                FS.State(StateSplitMushroom.JumpStance, 12)
+                FS.State(StaeFlameStag.JumpStance, 12)
             ElseIf FS.FDir = FaceDir.Right Then
                 FS.Vx = 90
                 FS.Vy = -30
-                FS.State(StateSplitMushroom.JumpStance, 12)
+                FS.State(StaeFlameStag.JumpStance, 12)
 
             End If
         End If
         'detect down arrow key
         If keyData = Keys.Down Then
             If FS.PosY = 710 Then
-                FS.State(StateSplitMushroom.Stand, 6)
+                FS.State(StaeFlameStag.Stand, 6)
             End If
-            If FS.CurrState = StateSplitMushroom.ChangeStance Then
+            If FS.CurrState = StaeFlameStag.ChangeStance Then
                 FS.godown = True
                 If FS.FDir = FaceDir.Left Then
                     FS.Vx = -40
                     FS.Vy = 8
-                    '  FS.State(StateSplitMushroom.JumpDown, 7)
+                    '  FS.State(StaeFlameStag.JumpDown, 7)
                 ElseIf FS.FDir = FaceDir.Right Then
                     FS.Vx = 40
                     FS.Vy = 8
-                    '  FS.State(StateSplitMushroom.JumpDown, 7)
+                    '  FS.State(StaeFlameStag.JumpDown, 7)
 
                 End If
             End If
         End If
 
         'detect left arrow key
-        If keyData = Keys.Left And FS.CurrState = StateSplitMushroom.Stand Then 'dash left Then
+        If keyData = Keys.Left And FS.CurrState = StaeFlameStag.Stand Then 'dash left Then
             If FS.PosY >= 710 Then
                 FS.PosY = 710
                 FS.FDir = FaceDir.Left
                 FS.Vx = -50
                 'FS.doSmackDown = True
-                FS.State(StateSplitMushroom.Charge, 3)
+                FS.State(StaeFlameStag.Charge, 3)
 
             End If
         End If
 
         'detect right arrow key
-        If keyData = Keys.Right And FS.CurrState = StateSplitMushroom.Stand Then ' dash right
+        If keyData = Keys.Right And FS.CurrState = StaeFlameStag.Stand Then ' dash right
             If FS.PosY >= 710 Then
                 FS.PosY = 710
                 FS.FDir = FaceDir.Right
                 'FS.doSmackDown = True
-                FS.State(StateSplitMushroom.Charge, 3)
+                FS.State(StaeFlameStag.Charge, 3)
 
                 FS.Vx = 50
             End If
@@ -500,12 +525,12 @@ Public Class Form1
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         Dim input As String
         input = e.KeyCode
-        If FS.CurrState = StateSplitMushroom.Stand Then
+        If FS.CurrState = StaeFlameStag.Stand Then
             Select Case input
                 Case 32 'spacebar
                     If FS.PosY >= 710 Then
                         FS.PosY = 710
-                        FS.State(StateSplitMushroom.DownAttack, 8)
+                        FS.State(StaeFlameStag.DownAttack, 8)
 
                     End If
                 Case Keys.Z
@@ -514,11 +539,11 @@ Public Class Form1
                         If FS.FDir = FaceDir.Left Then
                             FS.Vx = -40
                             FS.Vy = -8
-                            FS.State(StateSplitMushroom.JumpStance, 12)
+                            FS.State(StaeFlameStag.JumpStance, 12)
                         ElseIf FS.FDir = FaceDir.Right Then
                             FS.Vx = 40
                             FS.Vy = -8
-                            FS.State(StateSplitMushroom.JumpStance, 12)
+                            FS.State(StaeFlameStag.JumpStance, 12)
                         End If
                     End If
 
@@ -534,7 +559,7 @@ Public Class Form1
                         MM.FDir = FaceDir.Left
                         MM.State(StateMegaMan.MMWalk, 1)
                         MM.Vx = 25
-                        If MM.PosX >= 500 Then
+                        If MM.PosX >= 475 Then
                             MM.PosX = MM.PosX + 0
                         Else
                             MM.PosX = MM.PosX + MM.Vx
@@ -599,7 +624,7 @@ Public Class Form1
 
         Dim randoms(1000) As Integer
         For i As Integer = 0 To randoms.Length - 1
-            randoms(i) = GetRandom(100, 500)
+            randoms(i) = GetRandom(100, 475)
             If randoms(i) < L1 - 50 Or randoms(i) > R1 + 50 Then
                 MM.PosX = randoms(i)
                 MM.Destroy = False
@@ -731,34 +756,21 @@ Public Class Form1
 
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
         PictureBox1.Refresh()
-        second = second + 1
-        second2 = second2 + 1
+
         second3 = second3 + 1
         second4 = second4 + 1
-        MM.DesSec = MM.DesSec + 1
-
-        If second = 3 Then
-            MM.State(StateMegaMan.MMStand, 0)
-        End If
-        If second2 = 3 Then
-            FS.State(StateSplitMushroom.Stand, 6)
-
-
-        End If
-
         If second3 = 5 Then
             MegaManRespawn(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), FS)
-            'second3 = 7
         End If
 
         For Each CC In ListChar
             CC.Update()
         Next
-        'collision part
+
         If second4 = 3 Then
             MM.Destroy = True
-            MM.PosX = 300
-            MM.PosY = 900
+            MM.PosX = 503
+            MM.PosY = 1000
             second3 = 0
             'second4 = 4
         End If
@@ -766,34 +778,27 @@ Public Class Form1
         x = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
         If x Then
 
-            If FS.CurrState <> StateSplitMushroom.Uppercut And FS.CurrState <> StateSplitMushroom.SmackDown And FS.CurrState <> StateSplitMushroom.UpAttack Then
+            If FS.CurrState <> StaeFlameStag.Uppercut And FS.CurrState <> StaeFlameStag.SmackDown And FS.CurrState <> StaeFlameStag.UpAttack Then
                 MM.State(StateMegaMan.MMGetHit, 3)
 
-                If MM.DesSec = 5 Then
 
-                    second4 = 0
-                    MM.DesSec = 1
-
-                End If
-
-                If MM.DesSec = 0 Then
-
-                    second4 = -2
-                    MM.DesSec = 1
+                If MM.HitGround = True Then '--> pas ke hit fs timer ilang nya
+                    second4 = 2
+                    MM.HitGround = False
 
                 End If
             End If
         End If
 
 
-        If FS.CurrState = StateSplitMushroom.Dash And x Then
+        If FS.CurrState = StaeFlameStag.Dash And x Then
             FS.doSmackDown = True
             If FS.FDir = FaceDir.Left Then
                 FS.FDir = FaceDir.Right
             Else
                 FS.FDir = FaceDir.Left
             End If
-            FS.State(StateSplitMushroom.UpAttack, 9)
+            FS.State(StaeFlameStag.UpAttack, 9)
             MM.State(StateMegaMan.MMGetUppercutted, 6)
 
 
@@ -804,46 +809,55 @@ Public Class Form1
         End If
 
 
-        If CollisionDetection(UpFire.ArrSprites(UpFire.IdxArrSprites).Elmt(UpFire.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), UpFire, MM) Then
+        If CollisionProjectileDetection(UpFire.ArrSprites(UpFire.IdxArrSprites).Elmt(UpFire.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), UpFire, MM) Then
             MM.State(StateMegaMan.MMGetBurned, 5)
             UpFire.Destroy = True
-            UpFire.PosX = 300
-            UpFire.PosY = 800
+            UpFire.PosX = 503
+            UpFire.PosY = 900
             second4 = 0
         End If
 
-        If CollisionDetection(DownFire.ArrSprites(DownFire.IdxArrSprites).Elmt(DownFire.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), DownFire, MM) Then
+        If CollisionProjectileDetection(DownFire.ArrSprites(DownFire.IdxArrSprites).Elmt(DownFire.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), DownFire, MM) Then
             MM.State(StateMegaMan.MMGetBurned, 5)
             DownFire.Destroy = True
-            DownFire.PosX = 300
-            DownFire.PosY = 800
+            DownFire.PosX = 503
+            DownFire.PosY = 900
             second4 = 0
         End If
 
         'A = CollisionDetection(MMFire.ArrSprites(MMFire.IdxArrSprites).Elmt(MMFire.FrameIdx), FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MMFire, FS)
-        If CollisionDetection(MMFire.ArrSprites(MMFire.IdxArrSprites).Elmt(MMFire.FrameIdx), FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MMFire, FS) Then
+        If CollisionProjectileDetection(MMFire.ArrSprites(MMFire.IdxArrSprites).Elmt(MMFire.FrameIdx), FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MMFire, FS) Then
 
-            second2 = 0
-            FS.State(StateSplitMushroom.GetHit, 5)
+            'second2 = 0
+            FS.State(StaeFlameStag.GetHit, 5)
 
             If MM.FDir = FaceDir.Left Then
-                FS.PosX = FS.PosX + 5
+
+                If FS.PosX >= 475 Then
+                    FS.PosX = FS.PosX + 0
+                Else
+                    FS.PosX = FS.PosX + 5
+                End If
 
             ElseIf MM.FDir = FaceDir.Right Then
-                FS.PosX = FS.PosX - 5
+                If FS.PosX <= 100 Then
+                    FS.PosX = FS.PosX + 0
+                Else
+                    FS.PosX = FS.PosX - 5
+                End If
             End If
 
             'A = False
             MMFire.Destroy = True
-            MMFire.PosY = 300
-            MMFire.PosX = 800
+            MMFire.PosY = 503
+            MMFire.PosX = 900
 
         End If
 
         'creating fireballs
-        If FS.CurrState = StateSplitMushroom.DownAttack And FS.FrameIdx = 9 Then
+        If FS.CurrState = StaeFlameStag.DownAttack And FS.FrameIdx = 9 Then
             CreateDownFireball()
-        ElseIf FS.CurrState = StateSplitMushroom.UpAttack And FS.FrameIdx = 5 Then
+        ElseIf FS.CurrState = StaeFlameStag.UpAttack And FS.FrameIdx = 5 Then
             CreateUpFireball()
         End If
 
