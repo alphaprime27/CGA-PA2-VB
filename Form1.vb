@@ -84,17 +84,17 @@ Public Class Form1
         FlameStagSmackDown.Insert(227 * 2, 505 * 2, 212 * 2, 472 * 2, 244 * 2, 545 * 2, 1)
 
         FlameStagDash = New CArrFrame
-        FlameStagDash.Insert(48 * 2, 398 * 2, 10 * 2, 362 * 2, 80 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(134 * 2, 398 * 2, 96 * 2, 362 * 2, 165 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(218 * 2, 398 * 2, 177 * 2, 362 * 2, 250 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(308 * 2, 398 * 2, 258 * 2, 362 * 2, 341 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(405 * 2, 398 * 2, 347 * 2, 362 * 2, 437 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(508 * 2, 398 * 2, 443 * 2, 362 * 2, 540 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(620 * 2, 398 * 2, 546 * 2, 360 * 2, 652 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(739 * 2, 398 * 2, 657 * 2, 360 * 2, 770 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(869 * 2, 398 * 2, 777 * 2, 360 * 2, 898 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(1003 * 2, 398 * 2, 905 * 2, 360 * 2, 1034 * 2, 428 * 2, 1)
-        FlameStagDash.Insert(1225 * 2, 398 * 2, 1041 * 2, 360 * 2, 1255 * 2, 428 * 2, 1)
+        'FlameStagDash.Insert(48 * 2, 398 * 2, 10 * 2, 362 * 2, 80 * 2, 428 * 2, 1)
+        ' FlameStagDash.Insert(134 * 2, 398 * 2, 96 * 2, 362 * 2, 165 * 2, 428 * 2, 1)
+        ' FlameStagDash.Insert(218 * 2, 398 * 2, 177 * 2, 362 * 2, 250 * 2, 428 * 2, 1)
+        'FlameStagDash.Insert(308 * 2, 398 * 2, 258 * 2, 362 * 2, 341 * 2, 428 * 2, 1)
+        'FlameStagDash.Insert(405 * 2, 398 * 2, 347 * 2, 362 * 2, 437 * 2, 428 * 2, 2)
+        FlameStagDash.Insert(508 * 2, 398 * 2, 443 * 2, 362 * 2, 540 * 2, 428 * 2, 2)
+        FlameStagDash.Insert(620 * 2, 398 * 2, 546 * 2, 360 * 2, 652 * 2, 428 * 2, 2)
+        FlameStagDash.Insert(739 * 2, 398 * 2, 657 * 2, 360 * 2, 770 * 2, 428 * 2, 2)
+        FlameStagDash.Insert(869 * 2, 398 * 2, 777 * 2, 360 * 2, 898 * 2, 428 * 2, 2)
+        FlameStagDash.Insert(1003 * 2, 398 * 2, 905 * 2, 360 * 2, 1034 * 2, 428 * 2, 2)
+        FlameStagDash.Insert(1225 * 2, 398 * 2, 1041 * 2, 360 * 2, 1255 * 2, 428 * 2, 2)
 
         FlameStagUppercut = New CArrFrame
         FlameStagUppercut.Insert(38 * 2, 510 * 2, 15 * 2, 479 * 2, 52 * 2, 544 * 2, 3)
@@ -211,9 +211,9 @@ Public Class Form1
         FS.ArrSprites(13) = FlameStagStanceOnTheWall
 
         FS.PosX = 100
-        FS.PosY = 400
-        FS.Vx = 60
-        FS.Vy = 30
+        FS.PosY = 370
+        FS.Vx = 55
+        FS.Vy = 20
         FS.godown = True
         FS.dointro = True
         FS.State(StateFlameStag.JumpDown, 7)
@@ -251,14 +251,14 @@ Public Class Form1
         DisplayImg()
         'DisplayImgMegaMan()
         ResizeImg()
-        PlayLoopingBackgroundSoundResource()
+        ' PlayLoopingBackgroundSoundResource()
         Timer1.Enabled = True
 
     End Sub
-    Sub PlayLoopingBackgroundSoundResource() 'For playing songs
-        My.Computer.Audio.Play(My.Resources.Flamestag,
-          AudioPlayMode.BackgroundLoop)
-    End Sub
+    'Sub PlayLoopingBackgroundSoundResource() 'For playing songs
+    '    My.Computer.Audio.Play(My.Resources.Flamestag,
+    '      AudioPlayMode.BackgroundLoop)
+    'End Sub
 
     Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CFlameStag, object2 As CFlameStag)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
@@ -441,11 +441,11 @@ Public Class Form1
         'detect up arrow key
         If keyData = Keys.Up And FS.CurrState = StateFlameStag.Stand Then
             If FS.FDir = FaceDir.Left Then
-                FS.Vx = -90
+                FS.Vx = -50
                 FS.Vy = -30
                 FS.State(StateFlameStag.JumpStance, 12)
             ElseIf FS.FDir = FaceDir.Right Then
-                FS.Vx = 90
+                FS.Vx = 50
                 FS.Vy = -30
                 FS.State(StateFlameStag.JumpStance, 12)
 
