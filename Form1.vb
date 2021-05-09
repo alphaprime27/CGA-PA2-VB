@@ -7,31 +7,16 @@ Public Class Form1
     Dim SpriteMap As CImage
     Dim SpriteMask As CImage
     Dim DownFireBall, MegamanGetSmackDowned, MegamanGetUppercutted, MegamanGetHit, MegamanAttack, MegamanGetBurned, MegaManFireBall, MegamanWalk, MegamanStand, UpFireBall, FlameStagJump, FlameStagStanceOnTheGround, FlameStagUppercut, FlameStagStanceOnTheWall, FlameStagDeath, FlameStagCharge, FlameStagLanding, FlameStagStand, FlameStagGetHit, FlameStagIntro, FlameStagDownAttack, FlameStagUpAttack, FlameStagDash, FlameStagSmackDown As CArrFrame
-    Dim FS As CCharacter
+    Dim FS As CFlameStag
     Dim MM As CMegamen
-    Dim ListChar As New List(Of CCharacter)
-    Dim x As Boolean
-    Dim second As Integer
-    Dim second3 As Integer = 99
-    Dim second4 As Integer = 99
-    Dim second2 As Integer = 99
-
+    Dim ListChar As New List(Of CFlameStag)
+    Dim Collision As Boolean
+    Dim respawnTime As Integer = 99
+    Dim destroyTime As Integer = 99
     Dim MMFire As CMMFireProjectile
     Dim DownFire As CDownFireProjectile
     Dim UpFire As CUpFireProjectile
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        'open image for background, assign to bg
-        'My.Computer.Audio.Play("C:\Users\ASUS\Downloads\sprite animation v1\bin\Debug\Undertale - Megalovania.mp3")
-
-        'add a media player
-        'Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
-
-        'assign the location of the song to be played
-        'Dim SongLocation = "Undertale - Megalovania.mp3" 'any song you want to play
-        'play the song
-        'Player.URL = SongLocation
-        'Player.controls.play()
-
 
         Bg = New CImage
         Bg.OpenImage("background_2.bmp")
@@ -44,14 +29,9 @@ Public Class Form1
 
         'initialize sprites
         FlameStagJump = New CArrFrame
-
-        'FlameStagJump.Insert(37 * 2, 53 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 1)
         FlameStagJump.Insert(104 * 2, 53 * 2, 77 * 2, 27 * 2, 139 * 2, 74 * 2, 1)
-        'FlameStagJump.Insert(149* 2, 43* 2, 125* 2, 13* 2, 176* 2, 71* 2, 1)
-        'FlameStagJump.Insert(210* 2, 45* 2, 183* 2, 16* 2, 236* 2, 72* 2, 1)
-        'FlameStagJump.Insert(284* 2, 41* 2, 252* 2, 13* 2, 304* 2, 70* 2, 1)
-        FlameStagStanceOnTheGround = New CArrFrame
 
+        FlameStagStanceOnTheGround = New CArrFrame
         FlameStagStanceOnTheGround.Insert(37 * 2, 53 * 2, 7 * 2, 27 * 2, 69 * 2, 74 * 2, 10)
 
         FlameStagStanceOnTheWall = New CArrFrame
@@ -210,14 +190,9 @@ Public Class Form1
         MM.ArrSprites(6) = MegamanGetUppercutted
         MM.ArrSprites(7) = MegamanGetSmackDowned
 
-        MM.ArrSprites(8) = MegamanStand
-        MM.ArrSprites(9) = MegamanStand
-        MM.ArrSprites(10) = MegamanStand
-        MM.ArrSprites(11) = MegamanStand
-        MM.ArrSprites(12) = MegamanStand
-        MM.ArrSprites(13) = MegamanStand
 
-        FS = New CCharacter
+
+        FS = New CFlameStag
         ReDim FS.ArrSprites(13)
 
         FS.ArrSprites(0) = FlameStagIntro
@@ -241,7 +216,7 @@ Public Class Form1
         FS.Vy = 20
         FS.godown = True
         FS.dointro = True
-        FS.State(StaeFlameStag.JumpDown, 7)
+        FS.State(StateFlameStag.JumpDown, 7)
         FS.FDir = FaceDir.Right
 
         bmp = New Bitmap(Img.Width, Img.Height)
@@ -285,7 +260,7 @@ Public Class Form1
           AudioPlayMode.BackgroundLoop)
     End Sub
 
-    Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
+    Public Function CollisionDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CFlameStag, object2 As CFlameStag)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
 
         L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX
@@ -308,7 +283,7 @@ Public Class Form1
 
     End Function
 
-    Public Function CollisionProjectileDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CCharacter, object2 As CCharacter)
+    Public Function CollisionProjectileDetection(frame1 As CElmtFrame, frame2 As CElmtFrame, object1 As CFlameStag, object2 As CFlameStag)
         Dim L1, L2, R1, R2, T1, T2, B1, B2 As Integer
 
         L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX
@@ -332,7 +307,7 @@ Public Class Form1
     End Function
 
     Sub PutSprite()
-        Dim cc As CCharacter
+        Dim cc As CFlameStag
 
         Dim i, j As Integer
         'set background
@@ -464,57 +439,57 @@ Public Class Form1
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
         'detect up arrow key
-        If keyData = Keys.Up And FS.CurrState = StaeFlameStag.Stand Then
+        If keyData = Keys.Up And FS.CurrState = StateFlameStag.Stand Then
             If FS.FDir = FaceDir.Left Then
                 FS.Vx = -90
                 FS.Vy = -30
-                FS.State(StaeFlameStag.JumpStance, 12)
+                FS.State(StateFlameStag.JumpStance, 12)
             ElseIf FS.FDir = FaceDir.Right Then
                 FS.Vx = 90
                 FS.Vy = -30
-                FS.State(StaeFlameStag.JumpStance, 12)
+                FS.State(StateFlameStag.JumpStance, 12)
 
             End If
         End If
         'detect down arrow key
         If keyData = Keys.Down Then
             If FS.PosY = 710 Then
-                FS.State(StaeFlameStag.Stand, 6)
+                FS.State(StateFlameStag.Stand, 6)
             End If
-            If FS.CurrState = StaeFlameStag.ChangeStance Then
+            If FS.CurrState = StateFlameStag.ChangeStance Then
                 FS.godown = True
                 If FS.FDir = FaceDir.Left Then
                     FS.Vx = -40
                     FS.Vy = 8
-                    '  FS.State(StaeFlameStag.JumpDown, 7)
+                    '  FS.State(StateFlameStag.JumpDown, 7)
                 ElseIf FS.FDir = FaceDir.Right Then
                     FS.Vx = 40
                     FS.Vy = 8
-                    '  FS.State(StaeFlameStag.JumpDown, 7)
+                    '  FS.State(StateFlameStag.JumpDown, 7)
 
                 End If
             End If
         End If
 
         'detect left arrow key
-        If keyData = Keys.Left And FS.CurrState = StaeFlameStag.Stand Then 'dash left Then
+        If keyData = Keys.Left And FS.CurrState = StateFlameStag.Stand Then 'dash left Then
             If FS.PosY >= 710 Then
                 FS.PosY = 710
                 FS.FDir = FaceDir.Left
                 FS.Vx = -50
                 'FS.doSmackDown = True
-                FS.State(StaeFlameStag.Charge, 3)
+                FS.State(StateFlameStag.Charge, 3)
 
             End If
         End If
 
         'detect right arrow key
-        If keyData = Keys.Right And FS.CurrState = StaeFlameStag.Stand Then ' dash right
+        If keyData = Keys.Right And FS.CurrState = StateFlameStag.Stand Then ' dash right
             If FS.PosY >= 710 Then
                 FS.PosY = 710
                 FS.FDir = FaceDir.Right
                 'FS.doSmackDown = True
-                FS.State(StaeFlameStag.Charge, 3)
+                FS.State(StateFlameStag.Charge, 3)
 
                 FS.Vx = 50
             End If
@@ -525,12 +500,12 @@ Public Class Form1
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         Dim input As String
         input = e.KeyCode
-        If FS.CurrState = StaeFlameStag.Stand Then
+        If FS.CurrState = StateFlameStag.Stand Then
             Select Case input
                 Case 32 'spacebar
                     If FS.PosY >= 710 Then
                         FS.PosY = 710
-                        FS.State(StaeFlameStag.DownAttack, 8)
+                        FS.State(StateFlameStag.DownAttack, 8)
 
                     End If
                 Case Keys.Z
@@ -539,11 +514,11 @@ Public Class Form1
                         If FS.FDir = FaceDir.Left Then
                             FS.Vx = -40
                             FS.Vy = -8
-                            FS.State(StaeFlameStag.JumpStance, 12)
+                            FS.State(StateFlameStag.JumpStance, 12)
                         ElseIf FS.FDir = FaceDir.Right Then
                             FS.Vx = 40
                             FS.Vy = -8
-                            FS.State(StaeFlameStag.JumpStance, 12)
+                            FS.State(StateFlameStag.JumpStance, 12)
                         End If
                     End If
 
@@ -568,7 +543,7 @@ Public Class Form1
 
 
                         MM.Vx = 0
-                        second = 0
+
                     End If
                 Case Keys.A
                     If MM.CurrState = StateMegaMan.MMStand And FS.dointro = False Then
@@ -582,12 +557,12 @@ Public Class Form1
                         End If
 
                         MM.Vx = 0
-                        second = 0
+
                     End If
                 Case Keys.S
                     If MM.CurrState = StateMegaMan.MMStand And FS.dointro = False Then
                         MM.State(StateMegaMan.MMAttack, 2)
-                        second = 0
+
                     End If
 
             End Select
@@ -599,7 +574,7 @@ Public Class Form1
         Return Generator.Next(Min, Max)
     End Function
 
-    Sub MegaManRespawn(frame1 As CElmtFrame, object1 As CCharacter)
+    Sub MegaManRespawn(frame1 As CElmtFrame, object1 As CFlameStag)
         Dim L1, R1 As Integer
         L1 = frame1.Left - frame1.CtrPoint.x + object1.PosX
         R1 = frame1.Right - frame1.CtrPoint.x + object1.PosX
@@ -757,9 +732,9 @@ Public Class Form1
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
         PictureBox1.Refresh()
 
-        second3 = second3 + 1
-        second4 = second4 + 1
-        If second3 = 5 Then
+        respawnTime = respawnTime + 1
+        destroyTime = destroyTime + 1
+        If respawnTime = 5 Then
             MegaManRespawn(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), FS)
         End If
 
@@ -767,23 +742,23 @@ Public Class Form1
             CC.Update()
         Next
 
-        If second4 = 3 Then
+        If destroyTime = 3 Then
             MM.Destroy = True
             MM.PosX = 503
             MM.PosY = 1000
-            second3 = 0
-            'second4 = 4
+            respawnTime = 0
+            'destroyTime = 4
         End If
 
-        x = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
-        If x Then
+        Collision = CollisionDetection(FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), FS, MM)
+        If Collision Then
 
-            If FS.CurrState <> StaeFlameStag.Uppercut And FS.CurrState <> StaeFlameStag.SmackDown And FS.CurrState <> StaeFlameStag.UpAttack Then
+            If FS.CurrState <> StateFlameStag.Uppercut And FS.CurrState <> StateFlameStag.SmackDown And FS.CurrState <> StateFlameStag.UpAttack Then
                 MM.State(StateMegaMan.MMGetHit, 3)
 
 
                 If MM.HitGround = True Then '--> pas ke hit fs timer ilang nya
-                    second4 = 2
+                    destroyTime = 2
                     MM.HitGround = False
 
                 End If
@@ -791,30 +766,24 @@ Public Class Form1
         End If
 
 
-        If FS.CurrState = StaeFlameStag.Dash And x Then
+        If FS.CurrState = StateFlameStag.Dash And Collision Then
             FS.doSmackDown = True
             If FS.FDir = FaceDir.Left Then
                 FS.FDir = FaceDir.Right
             Else
                 FS.FDir = FaceDir.Left
             End If
-            FS.State(StaeFlameStag.UpAttack, 9)
+            FS.State(StateFlameStag.UpAttack, 9)
             MM.State(StateMegaMan.MMGetUppercutted, 6)
 
-
-
-
-            'MM.PosY = MM.PosY + MM.Vy
-            ' second4 = 0
         End If
-
 
         If CollisionProjectileDetection(UpFire.ArrSprites(UpFire.IdxArrSprites).Elmt(UpFire.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), UpFire, MM) Then
             MM.State(StateMegaMan.MMGetBurned, 5)
             UpFire.Destroy = True
             UpFire.PosX = 503
             UpFire.PosY = 900
-            second4 = 0
+            destroyTime = 0
         End If
 
         If CollisionProjectileDetection(DownFire.ArrSprites(DownFire.IdxArrSprites).Elmt(DownFire.FrameIdx), MM.ArrSprites(MM.IdxArrSprites).Elmt(MM.FrameIdx), DownFire, MM) Then
@@ -822,14 +791,14 @@ Public Class Form1
             DownFire.Destroy = True
             DownFire.PosX = 503
             DownFire.PosY = 900
-            second4 = 0
+            destroyTime = 0
         End If
 
         'A = CollisionDetection(MMFire.ArrSprites(MMFire.IdxArrSprites).Elmt(MMFire.FrameIdx), FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MMFire, FS)
         If CollisionProjectileDetection(MMFire.ArrSprites(MMFire.IdxArrSprites).Elmt(MMFire.FrameIdx), FS.ArrSprites(FS.IdxArrSprites).Elmt(FS.FrameIdx), MMFire, FS) Then
 
             'second2 = 0
-            FS.State(StaeFlameStag.GetHit, 5)
+            FS.State(StateFlameStag.GetHit, 5)
 
             If MM.FDir = FaceDir.Left Then
 
@@ -855,9 +824,9 @@ Public Class Form1
         End If
 
         'creating fireballs
-        If FS.CurrState = StaeFlameStag.DownAttack And FS.FrameIdx = 9 Then
+        If FS.CurrState = StateFlameStag.DownAttack And FS.FrameIdx = 9 Then
             CreateDownFireball()
-        ElseIf FS.CurrState = StaeFlameStag.UpAttack And FS.FrameIdx = 5 Then
+        ElseIf FS.CurrState = StateFlameStag.UpAttack And FS.FrameIdx = 5 Then
             CreateUpFireball()
         End If
 
@@ -865,7 +834,7 @@ Public Class Form1
             CreateMMFireball()
         End If
 
-        Dim Listchar1 As New List(Of CCharacter)
+        Dim Listchar1 As New List(Of CFlameStag)
 
         For Each CC In ListChar
             If Not CC.Destroy Then
@@ -875,7 +844,7 @@ Public Class Form1
 
         ListChar = Listchar1
 
-        DisplayImg()
+
         FS.Update()
         MM.Update()
         DisplayImg()
