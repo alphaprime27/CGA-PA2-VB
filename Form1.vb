@@ -211,9 +211,9 @@ Public Class Form1
         FS.ArrSprites(13) = FlameStagStanceOnTheWall
 
         FS.PosX = 100
-        FS.PosY = 370
-        FS.Vx = 55
-        FS.Vy = 20
+        FS.PosY = 400
+        FS.Vx = 60
+        FS.Vy = 30
         FS.godown = True
         FS.dointro = True
         FS.State(StateFlameStag.JumpDown, 7)
