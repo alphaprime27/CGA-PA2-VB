@@ -233,7 +233,7 @@ Public Class CFlameStag
                 PosX = PosX + Vx
                 PosY = PosY + Vy
                 'Vy = Vy + 0.2
-                Vy = -30
+                Vy = -10
 
 
                 GetNextFrame()
@@ -242,7 +242,7 @@ Public Class CFlameStag
                     State(StateFlameStag.ChangeStance, 13)
                     'FDir = FaceDir.Left
 
-                    Vx = -90
+                    Vx = -40
                     'Vy = -90
 
 
@@ -251,7 +251,7 @@ Public Class CFlameStag
                     PosX = 100
                     State(StateFlameStag.ChangeStance, 13)
                     'FDir = FaceDir.Right
-                    Vx = 90
+                    Vx = 40
                     ' Vy = -90
 
 
@@ -277,12 +277,12 @@ Public Class CFlameStag
 
                         If PosX >= 503 Then
                             PosX = 490
-                            Vx = -90
+                            Vx = -40
 
                             FDir = FaceDir.Left
                         ElseIf PosX <= 100 Then
                             PosX = 110
-                            Vx = 90
+                            Vx = 40
 
                             FDir = FaceDir.Right
                         End If
@@ -323,10 +323,10 @@ Public Class CFlameStag
 
             Case StateFlameStag.Uppercut ' ========================================> UPPERCUT 1 
                 GetNextFrame()
-                Vy = -53
+                Vy = -33
                 PosY = PosY + Vy
                 If PosY < 90 And doSmackDown = True Then
-                    Vy = 120
+                    Vy = 40
                     State(StateFlameStag.SmackDown, 11)
                 ElseIf PosY < 90 Then
                     If PosX >= 503 Then
@@ -447,11 +447,11 @@ Public Class CFlameStag
                 GetNextFrame()
                 PosX = PosX + Vx
                 PosY = PosY + Vy
-                Vy = 15
+                Vy = 10
 
                 If PosX >= 503 Then
                     PosX = 503
-                    Vx = -90
+                    Vx = -40
                     'Vy = 8
                     FDir = FaceDir.Right
                     State(StateFlameStag.ChangeStance, 13)
@@ -461,7 +461,7 @@ Public Class CFlameStag
 
                 If PosX <= 100 Then
                     PosX = 100
-                    Vx = 90
+                    Vx = 40
                     'Vy = 8
                     State(StateFlameStag.ChangeStance, 13)
                     FDir = FaceDir.Left
@@ -482,11 +482,14 @@ Public Class CFlameStag
                 GetNextMove(StateFlameStag.Jump, 7)
 
             Case StateFlameStag.GetHit ' ========================================> JUMP STANCE 12
-
+                GetNextFrame()
+                If PosY < 710 Then
+                    State(StateFlameStag.Fall, 2)
+                End If
                 If FrameIdx = 0 And CurrFrame = 4 Then
                     State(StateFlameStag.Stand, 6)
                 End If
-                GetNextFrame()
+
         End Select
 
     End Sub
@@ -659,10 +662,10 @@ Public Class CMegamen ' =========================>Megamen
                 'GetNextFrame()
 
             Case StateMegaMan.MMGetUppercutted
-                If PosY < 235 Then
+                If PosY < 210 Then
                     State(StateMegaMan.MMGetSmackedDown, 7)
                 End If
-                Vy = -30
+                Vy = -20
                 Vx = 0
 
                 PosX = PosX + Vx
@@ -672,7 +675,7 @@ Public Class CMegamen ' =========================>Megamen
 
 
             Case StateMegaMan.MMGetSmackedDown
-                Vy = 120
+                Vy = 40
                 Vx = 0
                 PosX = PosX + Vx
                 PosY = PosY + Vy
