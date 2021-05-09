@@ -1,6 +1,6 @@
 Imports System.IO
 
-Public Enum StateSplitMushroom
+Public Enum StateFlameStag
     Intro
     Jump
     JumpDown
@@ -36,31 +36,23 @@ Public Enum FaceDir
 End Enum
 Public Enum DownStateFireballs
     Create
-
     Go
-
-
     Destroy
 
 End Enum
 
 Public Enum UpStateFireballs
-
     Create2
-
     Go2
     ClimbUp
     Destroy
-
 End Enum
 
 
 Public Enum StateMMFireballs
-
     CreateMM
     GoMM
     Destroy
-
 End Enum
 
 
@@ -177,24 +169,23 @@ Public Class character
     End Sub
 End Class
 
-Public Class CCharacter
+Public Class CFlameStag
     Inherits character
     Public PosX, PosY As Double
     Public Vx, Vy As Double
-    Public CurrState As StateSplitMushroom
+    Public CurrState As StateFlameStag
     Public FrameIdx As Integer
     Public CurrFrame As Integer
     Public ArrSprites() As CArrFrame
     Public IdxArrSprites As Integer
     Public FDir As FaceDir
-    Public ok As Integer
     Public Destroy As Boolean = False
     Public godown As Boolean = False
     Public dointro As Boolean = False
     Public doUppercut As Boolean = False
     Public doSmackDown As Boolean = False
 
-    Public Sub State(state As StateSplitMushroom, idxspr As Integer)
+    Public Sub State(state As StateFlameStag, idxspr As Integer)
         CurrState = state
         IdxArrSprites = idxspr
         CurrFrame = 0
@@ -215,7 +206,7 @@ Public Class CCharacter
 
     End Sub
 
-    Public Sub GetNextMove(a As StateSplitMushroom, idx As Integer)
+    Public Sub GetNextMove(a As StateFlameStag, idx As Integer)
         CurrFrame = CurrFrame + 1
         If CurrFrame = ArrSprites(IdxArrSprites).Elmt(FrameIdx).MaxFrameTime Then
             FrameIdx = FrameIdx + 1
@@ -232,13 +223,13 @@ Public Class CCharacter
     Public Overrides Sub Update()
         Select Case CurrState
 
-            Case StateSplitMushroom.Intro '===============================>'INTRO 0
+            Case StateFlameStag.Intro '===============================>'INTRO 0
                 GetNextFrame()
                 If FrameIdx = 9 And CurrFrame = 1 Then
-                    State(StateSplitMushroom.Stand, 6)
+                    State(StateFlameStag.Stand, 6)
                 End If
 
-            Case StateSplitMushroom.Jump '=================================>'JUMP 7
+            Case StateFlameStag.Jump '=================================>'JUMP 7
                 PosX = PosX + Vx
                 PosY = PosY + Vy
                 'Vy = Vy + 0.2
@@ -246,9 +237,9 @@ Public Class CCharacter
 
 
                 GetNextFrame()
-                If PosX >= 500 Then
-                    PosX = 500
-                    State(StateSplitMushroom.ChangeStance, 13)
+                If PosX >= 503 Then
+                    PosX = 503
+                    State(StateFlameStag.ChangeStance, 13)
                     'FDir = FaceDir.Left
 
                     Vx = -90
@@ -258,7 +249,7 @@ Public Class CCharacter
                 End If
                 If PosX <= 100 Then
                     PosX = 100
-                    State(StateSplitMushroom.ChangeStance, 13)
+                    State(StateFlameStag.ChangeStance, 13)
                     'FDir = FaceDir.Right
                     Vx = 90
                     ' Vy = -90
@@ -272,19 +263,19 @@ Public Class CCharacter
                 End If
                 If PosY >= 710 Then
                     PosY = 710
-                    State(StateSplitMushroom.Landing, 4)
+                    State(StateFlameStag.Landing, 4)
                     Vx = 0
                     Vy = 0
 
                 End If
-            Case StateSplitMushroom.ChangeStance ' ========================================> CHANGE STANCE 13
+            Case StateFlameStag.ChangeStance ' ========================================> CHANGE STANCE 13
                 PosY = PosY + Vy
                 Vy = 0.3
                 If godown = True Then
                     GetNextFrame()
                     If FrameIdx = 0 And CurrFrame = 0 Then
 
-                        If PosX >= 500 Then
+                        If PosX >= 503 Then
                             PosX = 490
                             Vx = -90
 
@@ -296,14 +287,14 @@ Public Class CCharacter
                             FDir = FaceDir.Right
                         End If
                         Vy = 10
-                        State(StateSplitMushroom.JumpDown, 7)
+                        State(StateFlameStag.JumpDown, 7)
                     End If
                 ElseIf doUppercut = True Then
                     GetNextFrame()
                     If FrameIdx = 1 And CurrFrame = 0 Then
 
-                        If PosX >= 500 Then
-                            PosX = 500
+                        If PosX >= 503 Then
+                            PosX = 503
                             Vx = 0
                             Vy = -20
                             FDir = FaceDir.Right
@@ -314,14 +305,14 @@ Public Class CCharacter
                             Vy = -20
                             FDir = FaceDir.Left
                         End If
-                        State(StateSplitMushroom.Uppercut, 1)
+                        State(StateFlameStag.Uppercut, 1)
                     End If
 
 
                 Else
                     GetNextFrame()
                     If FrameIdx = 0 And CurrFrame = 0 Then
-                        State(StateSplitMushroom.Jump, 7)
+                        State(StateFlameStag.Jump, 7)
                         If FDir = FaceDir.Left Then
                             FDir = FaceDir.Right
                         Else
@@ -330,16 +321,16 @@ Public Class CCharacter
                     End If
                 End If
 
-            Case StateSplitMushroom.Uppercut ' ========================================> UPPERCUT 1 
+            Case StateFlameStag.Uppercut ' ========================================> UPPERCUT 1 
                 GetNextFrame()
-                Vy = -40
+                Vy = -53
                 PosY = PosY + Vy
                 If PosY < 90 And doSmackDown = True Then
-                    Vy = 90
-                    State(StateSplitMushroom.SmackDown, 11)
+                    Vy = 120
+                    State(StateFlameStag.SmackDown, 11)
                 ElseIf PosY < 90 Then
-                    If PosX >= 500 Then
-                        PosX = 500
+                    If PosX >= 503 Then
+                        PosX = 503
 
                         FDir = FaceDir.Right
                     ElseIf PosX <= 100 Then
@@ -349,18 +340,18 @@ Public Class CCharacter
                     End If
                     godown = True
                     doUppercut = False
-                    State(StateSplitMushroom.ChangeStance, 13)
+                    State(StateFlameStag.ChangeStance, 13)
                     FrameIdx = 3
 
 
                 End If
-            Case StateSplitMushroom.SmackDown ' ========================================> SMACK DOWN 11
+            Case StateFlameStag.SmackDown ' ========================================> SMACK DOWN 11
                 GetNextFrame()
-                PosY = PosY + 90
+                PosY = PosY + Vy
 
 
                 If PosY > 710 Then
-                    State(StateSplitMushroom.Stand, 6)
+                    State(StateFlameStag.Stand, 6)
                     Vx = 0
                     Vy = 0
                     PosY = 710
@@ -369,43 +360,43 @@ Public Class CCharacter
                 End If
 
 
-            Case StateSplitMushroom.Fall ' ========================================> FALL 2
+            Case StateFlameStag.Fall ' ========================================> FALL 2
                 GetNextFrame()
                 PosX = PosX + Vx
                 PosY = PosY + Vy
                 Vx = 0
                 Vy = 50
                 If PosY > 710 Then
-                    State(StateSplitMushroom.Stand, 6)
+                    State(StateFlameStag.Stand, 6)
                     Vx = 0
                     Vy = 0
                     PosY = 710
                 End If
-            Case StateSplitMushroom.Dash ' ========================================> DASH 10
+            Case StateFlameStag.Dash ' ========================================> DASH 10
                 PosX = PosX + Vx
                 GetNextFrame()
 
 
-                If PosX >= 500 Then
+                If PosX >= 503 Then
                     FDir = FaceDir.Left
                     PosX = 490
-                    State(StateSplitMushroom.Stand, 6)
+                    State(StateFlameStag.Stand, 6)
 
 
 
                 End If
                 If PosX <= 100 Then
                     PosX = 110
-                    State(StateSplitMushroom.Stand, 6)
+                    State(StateFlameStag.Stand, 6)
                     FDir = FaceDir.Right
 
                 End If
-            Case StateSplitMushroom.DownAttack ' ========================================> DOWN ATTACK 8
+            Case StateFlameStag.DownAttack ' ========================================> DOWN ATTACK 8
 
-                GetNextMove(StateSplitMushroom.UpAttack, 9)
+                GetNextMove(StateFlameStag.UpAttack, 9)
 
 
-            Case StateSplitMushroom.UpAttack ' ========================================> UP ATTACK 9
+            Case StateFlameStag.UpAttack ' ========================================> UP ATTACK 9
                 GetNextFrame()
                 If doSmackDown = True Then
                     Vx = 0
@@ -416,54 +407,54 @@ Public Class CCharacter
                         Else
                             FDir = FaceDir.Left
                         End If
-                        State(StateSplitMushroom.Uppercut, 1)
+                        State(StateFlameStag.Uppercut, 1)
                     End If
                 Else
                     If FrameIdx = 0 And CurrFrame = 0 Then
-                        State(StateSplitMushroom.Stand, 6)
+                        State(StateFlameStag.Stand, 6)
                     End If
 
                 End If
-            Case StateSplitMushroom.Landing ' ========================================> LANDING 4
-               GetNextFrame()
+            Case StateFlameStag.Landing ' ========================================> LANDING 4
+                GetNextFrame()
                 If godown = True Then
                     If dointro = True Then
-                        State(StateSplitMushroom.Intro, 0)
+                        State(StateFlameStag.Intro, 0)
                         godown = False
                         dointro = False
                     ElseIf dointro = False Then
                         godown = False
-                        State(StateSplitMushroom.Stand, 6)
+                        State(StateFlameStag.Stand, 6)
                     End If
                 End If
 
-            Case StateSplitMushroom.Charge ' ========================================> CHARGE 3
+            Case StateFlameStag.Charge ' ========================================> CHARGE 3
                 GetNextFrame()
-                'State(StateSplitMushroom.Dash, 10)
+                'State(StateFlameStag.Dash, 10)
                 If FrameIdx = 1 And CurrFrame = 4 Then
                     If FDir = FaceDir.Left Then
                         FDir = FaceDir.Right
-                        State(StateSplitMushroom.Dash, 10)
+                        State(StateFlameStag.Dash, 10)
                     Else
                         FDir = FaceDir.Left
-                        State(StateSplitMushroom.Dash, 10)
+                        State(StateFlameStag.Dash, 10)
                     End If
                 End If
 
 
 
-            Case StateSplitMushroom.JumpDown ' ========================================> JUMP DOWN 7
+            Case StateFlameStag.JumpDown ' ========================================> JUMP DOWN 7
                 GetNextFrame()
                 PosX = PosX + Vx
                 PosY = PosY + Vy
                 Vy = 15
 
-                If PosX >= 500 Then
-                    PosX = 500
+                If PosX >= 503 Then
+                    PosX = 503
                     Vx = -90
                     'Vy = 8
                     FDir = FaceDir.Right
-                    State(StateSplitMushroom.ChangeStance, 13)
+                    State(StateFlameStag.ChangeStance, 13)
 
                 End If
 
@@ -472,14 +463,14 @@ Public Class CCharacter
                     PosX = 100
                     Vx = 90
                     'Vy = 8
-                    State(StateSplitMushroom.ChangeStance, 13)
+                    State(StateFlameStag.ChangeStance, 13)
                     FDir = FaceDir.Left
 
 
 
                 End If
                 If PosY > 710 Then
-                    State(StateSplitMushroom.Landing, 4)
+                    State(StateFlameStag.Landing, 4)
                     Vx = 0
                     Vy = 0
                     PosY = 710
@@ -487,13 +478,15 @@ Public Class CCharacter
 
 
 
-            Case StateSplitMushroom.JumpStance ' ========================================> JUMP STANCE 12
-                GetNextMove(StateSplitMushroom.Jump, 7)
+            Case StateFlameStag.JumpStance ' ========================================> JUMP STANCE 12
+                GetNextMove(StateFlameStag.Jump, 7)
 
-            Case StateSplitMushroom.GetHit ' ========================================> JUMP STANCE 12
+            Case StateFlameStag.GetHit ' ========================================> JUMP STANCE 12
+
+                If FrameIdx = 0 And CurrFrame = 4 Then
+                    State(StateFlameStag.Stand, 6)
+                End If
                 GetNextFrame()
-
-
         End Select
 
     End Sub
@@ -502,7 +495,7 @@ Public Class CCharacter
 
 End Class
 Public Class CDownFireProjectile
-    Inherits CCharacter
+    Inherits CFlameStag
     Public CurrState As DownStateFireballs
     Public Overloads Sub State(state As DownStateFireballs, idxspr As Integer)
         CurrState = state
@@ -543,7 +536,7 @@ End Class
 
 
 Public Class CUpFireProjectile
-    Inherits CCharacter
+    Inherits CFlameStag
     Public CurrState As UpStateFireballs
     Public Overloads Sub State(state As UpStateFireballs, idxspr As Integer)
         CurrState = state
@@ -587,7 +580,7 @@ Public Class CUpFireProjectile
 End Class
 
 Public Class CMMFireProjectile
-    Inherits CCharacter
+    Inherits CFlameStag
     Public CurrState As StateMMFireballs
     Public Overloads Sub State(state As StateMMFireballs, idxspr As Integer)
         CurrState = state
@@ -621,10 +614,10 @@ Public Class CMMFireProjectile
 
 End Class
 Public Class CMegamen ' =========================>Megamen
-    Inherits CCharacter
+    Inherits CFlameStag
     Public HitAnimation As Boolean = False
-    Public Hit As Boolean = False
-    Public DesSec As Integer = 99
+    Public HitGround As Boolean = False
+
     Public Overloads Sub State(state As StateMegaMan, idxspr As Integer)
         CurrState = state
         IdxArrSprites = idxspr
@@ -654,7 +647,10 @@ Public Class CMegamen ' =========================>Megamen
                 'PosX = PosX
 
             Case StateMegaMan.MMWalk
-                PosY = 730
+                If FrameIdx = 4 And CurrFrame = 1 Then
+                    State(StateMegaMan.MMStand, 0)
+                End If
+
                 GetNextFrame()
                 'GetNextFrame()
 
@@ -663,7 +659,7 @@ Public Class CMegamen ' =========================>Megamen
                 'GetNextFrame()
 
             Case StateMegaMan.MMGetUppercutted
-                If PosY < 85 Then
+                If PosY < 235 Then
                     State(StateMegaMan.MMGetSmackedDown, 7)
                 End If
                 Vy = -30
@@ -683,37 +679,9 @@ Public Class CMegamen ' =========================>Megamen
 
 
                 GetNextFrame()
-                If HitAnimation = True Then
-                    If PosX < 300 Then
-                        Vx = Vx + 1
-                        Vy = Vy + 1
-                    Else
-                        Vx = Vx - 1
-                        Vy = Vy + 1
-                    End If
-
-                    If PosY > 720 Then
-                        PosY = 720
-                        Vx = 0
-                        Vy = 0
-                        HitAnimation = False
-                        State(StateMegaMan.MMStand, 0)
-                        DesSec = 0
-                    End If
-                ElseIf PosY >= 720 And PosX < 300 Then
-                    PosY = 720
-                    Vx = 10
-                    Vy = -10
-                    FDir = FaceDir.Right
-                    HitAnimation = True
-                ElseIf PosY >= 720 And PosX >= 300 Then
-                    PosY = 720
-                    Vx = -10
-                    Vy = -10
-                    FDir = FaceDir.Left
-                    HitAnimation = True
+                If PosY >= 720 Then
+                    State(StateMegaMan.MMGetHit, 3)
                 End If
-
             Case StateMegaMan.MMGetHit
 
                 PosX = PosX + Vx
@@ -721,16 +689,16 @@ Public Class CMegamen ' =========================>Megamen
                 Vy = Vy + 0.4
 
                 GetNextFrame()
-                DesSec = 5
+
                 If HitAnimation = True Then
                     If PosX < 300 Then
-                        Vx = Vx + 2
+                        Vx = Vx + 1
                         Vy = Vy + 1
-                        DesSec = 0
+                        HitGround = True
                     Else
-                        Vx = Vx - 2
+                        Vx = Vx - 1
                         Vy = Vy + 1
-                        DesSec = 0
+                        HitGround = True
                     End If
 
                     If PosY > 720 Then
@@ -739,8 +707,6 @@ Public Class CMegamen ' =========================>Megamen
                         Vy = 0
                         HitAnimation = False
                         State(StateMegaMan.MMStand, 0)
-
-
                     End If
                 ElseIf PosY >= 720 And PosX < 300 Then
                     PosY = 720
